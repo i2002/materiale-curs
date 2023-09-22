@@ -7,7 +7,7 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './node_modules/@tremor/**/*.{js,ts,jsx,tsx}', // Tremor module
   ],
-  // darkMode: 'class',
+  darkMode: 'class',
   theme: {
     transparent: "transparent",
     current: "currentColor",
