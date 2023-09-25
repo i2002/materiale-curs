@@ -1,5 +1,5 @@
 import FolderView from "./components/FolderView";
-export { generateMetadata } from "./components/FolderView";
+// export { generateMetadata } from "./components/FolderView";
 
 type Props = {
   params: { slug: string }

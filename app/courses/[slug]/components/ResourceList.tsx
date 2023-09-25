@@ -1,7 +1,8 @@
 import { Table, TableBody, TableHead, TableHeaderCell, TableRow } from "@tremor/react";
 import ResourceListItem from "./ResourceListItem";
+import { Resource } from "@prisma/client";
 
-export default function ResourceList({ resources }: { resources: Array<{ name: string, type: string, size: string, modified: string, href: string }>}) {
+export default function ResourceList({ resources, slug }: { resources: Array<Resource>, slug: string }) {
   return (
     <Table>
       <TableHead>
@@ -13,7 +14,7 @@ export default function ResourceList({ resources }: { resources: Array<{ name: s
       </TableHead>
       <TableBody>
         {resources.map(resource => (
-          <ResourceListItem resource={resource} key={resource.name}></ResourceListItem>
+          <ResourceListItem resource={resource} slug={slug} key={resource.name}></ResourceListItem>
         ))}
       </TableBody>
     </Table>
