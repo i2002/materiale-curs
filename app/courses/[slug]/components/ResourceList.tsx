@@ -1,8 +1,10 @@
 import { Table, TableBody, TableHead, TableHeaderCell, TableRow } from "@tremor/react";
-import ResourceListItem from "./ResourceListItem";
-import { Resource } from "@prisma/client";
 
-export default function ResourceList({ resources, slug }: { resources: Array<Resource>, slug: string }) {
+interface Props {
+  children: React.ReactNode;
+}
+
+export default function ResourceList({ children }: Props) {
   return (
     <Table>
       <TableHead>
@@ -13,9 +15,7 @@ export default function ResourceList({ resources, slug }: { resources: Array<Res
         </TableRow>
       </TableHead>
       <TableBody>
-        {resources.map(resource => (
-          <ResourceListItem resource={resource} slug={slug} key={resource.name}></ResourceListItem>
-        ))}
+        {children}
       </TableBody>
     </Table>
   );

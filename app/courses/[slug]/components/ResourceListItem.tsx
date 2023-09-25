@@ -41,6 +41,6 @@ export default function ResourceListItem({ resource, slug }: { resource: Augumen
       </TableCell>
       <TableCell>{getSize(resource)}</TableCell>
       <TableCell>{"-"}</TableCell>
-      </TableRow>
+    </TableRow>
   );
 }
