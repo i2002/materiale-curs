@@ -1,4 +1,4 @@
-import { Resource } from "@prisma/client";
+import { Prisma, Resource } from "@prisma/client";
 import prisma from "./prisma";
 
 export async function getCourses() {
@@ -17,6 +17,19 @@ export async function getCourse(slug: string) {
   });
 }
 
+const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
+  include: {
+    fileData: true,
+    _count: {
+      select: {
+        children: true
+      }
+    }
+  }
+});
+
+export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
+
 export async function getResource(resId: string | undefined, courseSlug: string) {
   if (!resId) {
     let course = await getCourse(courseSlug);
@@ -31,11 +44,13 @@ export async function getResource(resId: string | undefined, courseSlug: string)
     where: { id: resId },
     include: {
       children: {
+        ...augumentedResource,
         orderBy: [
           { type: "desc" },
           { name: "asc" }
         ]
-      }
+      },
+      fileData: true
     }
   });
 }

@@ -1,3 +1,4 @@
+import { AugumentedResource } from "@/app/_lib/courseController";
 import { DocumentIcon, FolderIcon } from "@heroicons/react/24/outline";
 import { Resource } from "@prisma/client";
 import { TableCell, TableRow } from "@tremor/react";
@@ -24,9 +25,12 @@ const getHref = (res: Resource, slug: string) => {
   return `/courses/${slug}/${prefix}/${res.id}`;
 }
 
-// FIXME: last modified and size
+// FIXME: friendly format for kb size
+const getSize = (res: AugumentedResource) => res.type == "folder" ? 
+res._count.children ?? "-" :  
+`${res.fileData?.size} kb` ?? "-";
 
-export default function ResourceListItem({ resource, slug }: { resource: Resource, slug: string }) {
+export default function ResourceListItem({ resource, slug }: { resource: AugumentedResource, slug: string }) {
   return (
     <TableRow className="hover:bg-slate-100 active:bg-slate-50 border-y px-3 rounded-sm">
       <TableCell>
@@ -35,8 +39,8 @@ export default function ResourceListItem({ resource, slug }: { resource: Resourc
           {resource.name}
         </Link>
       </TableCell>
-      <TableCell>{"1"}</TableCell>
-      <TableCell>{"20 aug"}</TableCell>
+      <TableCell>{getSize(resource)}</TableCell>
+      <TableCell>{"-"}</TableCell>
       </TableRow>
   );
 }
