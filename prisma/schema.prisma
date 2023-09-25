@@ -20,20 +20,20 @@ model Post {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_at         Int?
-  expires_in         Int?
-  ext_expires_in     Int?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  expires_in        Int?
+  ext_expires_in    Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -49,15 +49,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String        @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?       @unique
   emailVerified DateTime?
   image         String?
-  role          String?   @default("student")
+  role          String?       @default("student")
   password      String?
   accounts      Account[]
   sessions      Session[]
+  lists         StudentList[]
 }
 
 model VerificationToken {
@@ -66,4 +67,45 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model Resource {
+  id       String  @id @default(cuid())
+  name     String
+  type     String  @default("folder")
+  parentId String?
+
+  parent   Resource?  @relation("resourceTree", fields: [parentId], references: [id], onDelete: Cascade)
+  children Resource[] @relation("resourceTree")
+  fileData FileData?  @relation()
+  course   Course?
+}
+
+model FileData {
+  id         Int    @id @default(autoincrement())
+  resourceId String @unique
+  mimeType   String
+  size       Int
+  path       String @unique
+
+  resource Resource @relation(fields: [resourceId], references: [id])
+}
+
+model Course {
+  slug           String        @id
+  name           String
+  year           Int
+  semester       Int
+  specialization String        @default("CTI")
+  rootFolderId   String        @unique
+
+  enrlolments    StudentList[]
+  rootFolder     Resource      @relation(fields: [rootFolderId], references: [id])
+}
+
+model StudentList {
+  id             Int      @id @default(autoincrement())
+  name           String
+  students       User[]
+  enroledCourses Course[]
 }
