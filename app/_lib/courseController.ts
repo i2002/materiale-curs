@@ -1,6 +1,10 @@
 import { Prisma, Resource } from "@prisma/client";
 import prisma from "./prisma";
 
+/**
+ * Query all courses info.
+ * @returns 
+ */
 export async function getCourses() {
   return await prisma.course.findMany({
     orderBy: [
@@ -11,6 +15,11 @@ export async function getCourses() {
   });
 }
 
+/**
+ * Query a course info.
+ * @param slug the course slug
+ * @returns 
+ */
 export async function getCourse(slug: string) {
   return await prisma.course.findUnique({
     where: { slug: slug }
@@ -30,6 +39,12 @@ const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
 
 export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
 
+/**
+ * Query a resource by its id from a course.
+ * @param resId the id of the resource requested (if undefined, it will return the root folder of the course specified)
+ * @param courseSlug the slug of the course
+ * @returns 
+ */
 export async function getResource(resId: string | undefined, courseSlug: string) {
   if (!resId) {
     let course = await getCourse(courseSlug);
