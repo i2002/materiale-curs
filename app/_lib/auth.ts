@@ -102,7 +102,7 @@ export const authOptions: NextAuthOptions = {
   //     console.log("debug", code, metadata)
   //   }
   // },
-  debug: true
+  // debug: true
 }
 
 // Helper functions
