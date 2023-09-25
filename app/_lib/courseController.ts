@@ -40,19 +40,34 @@ const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
 export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
 
 /**
- * Query a resource by its id from a course.
- * @param resId the id of the resource requested (if undefined, it will return the root folder of the course specified)
+ * Parse input URL to determine the id of the requested resource.
  * @param courseSlug the slug of the course
+ * @param path the URL path accessed
  * @returns 
  */
-export async function getResource(resId: string | undefined, courseSlug: string) {
-  if (!resId) {
+async function parseResourceId(courseSlug: string, path: string[]) {
+  if (path == undefined) {
     let course = await getCourse(courseSlug);
-    if (!course) {
-      return null;
-    }
+    return course?.rootFolderId ?? null;
+  }
 
-    resId = course.rootFolderId;
+  if (path[0] != "resource" || path.length != 2) {
+    return null;
+  }
+
+  return path[1];
+}
+
+/**
+ * Query a resource by the inputed url.
+ * @param courseSlug the slug of the course
+ * @param path the URL path accessed
+ * @returns 
+ */
+export async function getResource(courseSlug: string, path: string[]) {
+  let resId = await parseResourceId(courseSlug, path);
+  if (!resId) {
+    return null;
   }
 
   return await prisma.resource.findUnique({
@@ -79,10 +94,16 @@ export type ResourcePath = Array<PathSegment>;
 
 /**
  * Get the path (root resource, route segments and leaf resource) of a specified resource.
- * @param resId the id of the resource
+ * @param courseSlug the slug of the course
+ * @param path the URL path accessed
  * @returns 
  */
-export async function getResourcePath(res: Resource): Promise<ResourcePath> {
+export async function getResourcePath(courseSlug: string, urlPath: string[]): Promise<ResourcePath | null> {
+  let res: Resource | null = await getResource(courseSlug, urlPath);
+  if (res == null) {
+    return null;
+  }
+
   // query the segments  
   let segments: Array<PathSegment> = [{
     name: res.name,
