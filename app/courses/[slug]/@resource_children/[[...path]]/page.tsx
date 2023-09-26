@@ -1,4 +1,4 @@
-import { getResource } from "@/app/_lib/courseController";
+import { getResource, getResourceChildren } from "@/app/_lib/courseController";
 import { notFound } from "next/navigation";
 import ResourceListItem from "../../components/ResourceListItem";
 
@@ -8,14 +8,14 @@ type Props = {
 }
 
 export default async function Page({ params, searchParams } : Props) {
-  let res = await getResource(params.slug, params.path);
-  if (!res) {
+  let children = await getResourceChildren(params.slug, params.path);
+  if (!children) {
     notFound();
   }
 
   return (
     <>
-      {res.children.map(item => (
+      {children.map(item => (
         <ResourceListItem resource={item} slug={params.slug} key={item.id}></ResourceListItem>  
       ))}
     </>

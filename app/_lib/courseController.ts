@@ -26,19 +26,6 @@ export async function getCourse(slug: string) {
   });
 }
 
-const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
-  include: {
-    fileData: true,
-    _count: {
-      select: {
-        children: true
-      }
-    }
-  }
-});
-
-export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
-
 /**
  * Parse input URL to determine the id of the requested resource.
  * @param courseSlug the slug of the course
@@ -73,15 +60,43 @@ export async function getResource(courseSlug: string, path: string[]) {
   return await prisma.resource.findUnique({
     where: { id: resId },
     include: {
-      children: {
-        ...augumentedResource,
-        orderBy: [
-          { type: "desc" },
-          { name: "asc" }
-        ]
-      },
       fileData: true
     }
+  });
+}
+
+const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
+  include: {
+    fileData: true,
+    _count: {
+      select: {
+        children: true
+      }
+    }
+  }
+});
+
+// export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
+
+/**
+ * Query the children of a resource.
+ * @param courseSlug the slug of the course
+ * @param path the URL path accessed
+ * @returns 
+ */
+export async function getResourceChildren(courseSlug: string, path: string[]) {
+  let resId = await parseResourceId(courseSlug, path);
+  if (!resId) {
+    return null;
+  }
+
+  return await prisma.resource.findMany({
+    where: { parentId: resId },
+    ...augumentedResource,
+    orderBy: [
+      { type: "desc" },
+      { name: "asc" }
+    ]
   });
 }
 
