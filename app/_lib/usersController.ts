@@ -34,7 +34,7 @@ export async function createUser(username: string, password: string, role: strin
 export async function signInAllowed(user: AdapterUser | User) {
   if (user.email) {
     let found = await prisma.user.findUnique({
-      where: {id: user.id, email: user.email}
+      where: { email: user.email }
     });
 
     if (found) {
