@@ -13,11 +13,7 @@ export default async function Page({ params, searchParams } : Props) {
     notFound();
   }
 
-  return (
-    <>
-      {children.map(item => (
-        <ResourceListItem resource={item} slug={params.slug} key={item.id}></ResourceListItem>  
-      ))}
-    </>
-  );
+  return children.map(item => (
+    <ResourceListItem resource={item} slug={params.slug} key={item.id}></ResourceListItem>  
+  ));
 }

@@ -1,5 +1,6 @@
 import { getResourcePath } from "@/app/_lib/courseController";
 import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/outline";
+import { Fragment } from "react"
 import { Text } from "@tremor/react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,16 +19,16 @@ export default async function ResourcePathView({ params }: Props) {
 
   return (
     <>
-      <Link href={`/courses/${params.slug}`}>
+      <Link href={`/courses/${params.slug}`} key="home">
         <HomeIcon className="w-5 h-5 text-gray-600 hover:text-black"></HomeIcon>
       </Link>
       {path.map((item, index, array) => (
-        <>
-          <ChevronRightIcon className="w-5 h-5 text-gray-600 mx-1" key={`arrow-${index}`}></ChevronRightIcon>
-          <Link href={getSegmentHref(item.id, params.slug)} key={`segment-${index}`}>
+        <Fragment key={`segment-${item.id}`}>
+          <ChevronRightIcon className="w-5 h-5 text-gray-600 mx-1"></ChevronRightIcon>
+          <Link href={getSegmentHref(item.id, params.slug)}>
             <Text className={index === array.length - 1 ? "font-medium" : "hover:text-black hover:underline underline-offset-4"}>{item.name}</Text>
           </Link>
-        </>
+        </Fragment>
       ))}
     </>
   );
