@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { Course, Prisma, Resource } from "@prisma/client";
 import prisma from "./prisma";
 import { getCurrentUser, hasCoursePermission } from "./usersController";
@@ -6,7 +7,7 @@ import { getCurrentUser, hasCoursePermission } from "./usersController";
  * Query all courses info.
  * @returns 
  */
-export async function getCourses() {
+export const getCourses = cache(async () => {
   let user = await getCurrentUser();
   if (!user) {
     return [];
@@ -22,20 +23,20 @@ export async function getCourses() {
       { name: "asc" }
     ]
   });
-}
+});
 
 /**
  * Query a course info.
  * @param slug the course slug
  * @returns 
  */
-export async function getCourse(slug: string) {
+export const getCourse = cache(async (slug: string) => {
   let course = await prisma.course.findUnique({
     where: { slug: slug }
   });
 
   return course && await hasCoursePermission(course) ? course : null;
-}
+});
 
 /**
  * Determine query arguments from url input
@@ -65,7 +66,7 @@ function getResourceWhereInput(courseSlug: string, path: string[]): Prisma.Resou
  * @param path the URL path accessed
  * @returns 
  */
-export async function getResource(courseSlug: string, path: string[]) {
+export const getResource = cache(async (courseSlug: string, path: string[]) => {
   let condition = getResourceWhereInput(courseSlug, path);
   if(!condition) {
     return null;
@@ -77,7 +78,7 @@ export async function getResource(courseSlug: string, path: string[]) {
       fileData: true
     }
   });
-}
+});
 
 const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
   include: {
@@ -98,7 +99,7 @@ export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedReso
  * @param path the URL path accessed
  * @returns 
  */
-export async function getResourceChildren(courseSlug: string, path: string[]) {
+export const getResourceChildren = cache(async (courseSlug: string, path: string[]) => {
   let res = await getResource(courseSlug, path);
   if (!res) {
     return null;
@@ -112,7 +113,7 @@ export async function getResourceChildren(courseSlug: string, path: string[]) {
       { name: "asc" }
     ]
   });
-}
+});
 
 type PathSegment = {
   name: string;
@@ -127,7 +128,7 @@ export type ResourcePath = Array<PathSegment>;
  * @param path the URL path accessed
  * @returns 
  */
-export async function getResourcePath(courseSlug: string, urlPath: string[]): Promise<ResourcePath | null> {
+export const getResourcePath = cache(async (courseSlug: string, urlPath: string[]): Promise<ResourcePath | null> => {
   let res: Resource | null = await getResource(courseSlug, urlPath);
   if (res == null) {
     return null;
@@ -157,14 +158,14 @@ export async function getResourcePath(courseSlug: string, urlPath: string[]): Pr
   }
 
   return path;
-}
+});
 
 // /**
 //  * Get the root resource of a resource tree.
 //  * @param res the start resource node
 //  * @returns
 //  */
-// export async function getResourceRoot(res: Resource) {
+// export const getResourceRoot = cache(async (res: Resource) => {
 //   let parentId = res.parentId;
 //   while (parentId != null) {
 //     let temp = await prisma.resource.findUnique({
@@ -179,18 +180,18 @@ export async function getResourcePath(courseSlug: string, urlPath: string[]): Pr
 //   }
 
 //   return res;
-// }
+// });
 
 /**
  * Get all enrolled students in a course.
  * @param course the specified course
  * @returns 
  */
-export async function getCourseEnrolledStudents(course: Course) {
+export const getCourseEnrolledStudents = cache(async (course: Course) => {
   return await prisma.user.findMany({
     where: {
       role: "student",
       lists: { some: { enroledCourses: { some: { slug: course.slug } } } }
     }
   });
-}
+});

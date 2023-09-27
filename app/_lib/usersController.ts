@@ -2,6 +2,7 @@ import { User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
 import prisma from "./prisma";
 import bcrypt from "bcrypt";
+import { cache} from "react";
 import { Role } from "@/types";
 import { Course, Resource } from "@prisma/client";
 import { getUserSession } from "./auth";
@@ -85,7 +86,7 @@ export async function checkSignIn(credentials: Record<"username" | "password", s
  * Get the current user as valid database entry.
  * @returns 
  */
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async () => {
   let session = await getUserSession();
   if (session?.user?.email) {
     return await prisma.user.findUnique({
@@ -94,9 +95,9 @@ export async function getCurrentUser() {
   }
 
   return null;
-}
+});
 
-export async function hasResourcePermission(res: Resource) {
+export const hasResourcePermission = cache(async (res: Resource) => {
   let course = await prisma.course.findUnique({
     where: { slug: res.courseSlug }
   });
@@ -106,9 +107,9 @@ export async function hasResourcePermission(res: Resource) {
   }
 
   return hasCoursePermission(course);
-}
+});
 
-export async function hasCoursePermission(course: Course) {
+export const hasCoursePermission = cache(async (course: Course) => {
   let user = await getCurrentUser();
 
   if (!user) {
@@ -121,4 +122,4 @@ export async function hasCoursePermission(course: Course) {
 
   let students = await getCourseEnrolledStudents(course);
   return students.find(item => item.email === user?.email);
-}
+});
