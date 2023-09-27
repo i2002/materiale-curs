@@ -1,6 +1,6 @@
 import { Button, Card, Text, Title } from '@tremor/react';
 import Link from 'next/link'
- 
+
 export default function NotFound() {
   return (
     <div>
