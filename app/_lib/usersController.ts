@@ -3,6 +3,9 @@ import { AdapterUser } from "next-auth/adapters";
 import prisma from "./prisma";
 import bcrypt from "bcrypt";
 import { Role } from "@/types";
+import { Course, Resource } from "@prisma/client";
+import { getUserSession } from "./auth";
+import { getCourseEnrolledStudents } from "./courseController";
 
 /**
  * Create a new user.
@@ -76,4 +79,46 @@ export async function checkSignIn(credentials: Record<"username" | "password", s
     image: user.image,
     role: user.role as Role
   }
+}
+
+/**
+ * Get the current user as valid database entry.
+ * @returns 
+ */
+export async function getCurrentUser() {
+  let session = await getUserSession();
+  if (session?.user?.email) {
+    return await prisma.user.findUnique({
+      where: { email: session.user.email }
+    });
+  }
+
+  return null;
+}
+
+export async function hasResourcePermission(res: Resource) {
+  let course = await prisma.course.findUnique({
+    where: { slug: res.courseSlug }
+  });
+
+  if (!course) {
+    return null;
+  }
+
+  return hasCoursePermission(course);
+}
+
+export async function hasCoursePermission(course: Course) {
+  let user = await getCurrentUser();
+
+  if (!user) {
+    return null;
+  }
+
+  if (user.role === "admin") {
+    return true;
+  }
+
+  let students = await getCourseEnrolledStudents(course);
+  return students.find(item => item.email === user?.email);
 }

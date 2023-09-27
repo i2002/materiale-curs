@@ -1,12 +1,21 @@
-import { Prisma, Resource } from "@prisma/client";
+import { Course, Prisma, Resource } from "@prisma/client";
 import prisma from "./prisma";
+import { getCurrentUser, hasCoursePermission } from "./usersController";
 
 /**
  * Query all courses info.
  * @returns 
  */
 export async function getCourses() {
+  let user = await getCurrentUser();
+  if (!user) {
+    return [];
+  }
+
   return await prisma.course.findMany({
+    where: user.role !== "admin" ? {
+      enrolments: { some: { students: { some: { email: user.email } } } }
+    } : undefined,
     orderBy: [
       { year: "asc" },
       { semester: "asc" },
@@ -21,28 +30,33 @@ export async function getCourses() {
  * @returns 
  */
 export async function getCourse(slug: string) {
-  return await prisma.course.findUnique({
+  let course = await prisma.course.findUnique({
     where: { slug: slug }
   });
+
+  return course && await hasCoursePermission(course) ? course : null;
 }
 
 /**
- * Parse input URL to determine the id of the requested resource.
+ * Determine query arguments from url input
  * @param courseSlug the slug of the course
  * @param path the URL path accessed
- * @returns 
+ * @returns where query conditions or null if invalid url
  */
-async function parseResourceId(courseSlug: string, path: string[]) {
+function getResourceWhereInput(courseSlug: string, path: string[]): Prisma.ResourceWhereInput | null {
   if (path == undefined) {
-    let course = await getCourse(courseSlug);
-    return course?.rootFolderId ?? null;
+    return {
+      courseSlug: courseSlug,
+      parentId: null
+    };
+  } else if (path.length == 2 && path[0] == "resource") {
+    return {
+      courseSlug: courseSlug,
+      id: path[1]
+    };
   }
 
-  if (path[0] != "resource" || path.length != 2) {
-    return null;
-  }
-
-  return path[1];
+  return null;
 }
 
 /**
@@ -52,13 +66,13 @@ async function parseResourceId(courseSlug: string, path: string[]) {
  * @returns 
  */
 export async function getResource(courseSlug: string, path: string[]) {
-  let resId = await parseResourceId(courseSlug, path);
-  if (!resId) {
+  let condition = getResourceWhereInput(courseSlug, path);
+  if(!condition) {
     return null;
   }
 
-  return await prisma.resource.findUnique({
-    where: { id: resId },
+  return await prisma.resource.findFirst({
+    where: condition,
     include: {
       fileData: true
     }
@@ -76,7 +90,7 @@ const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
   }
 });
 
-// export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
+export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
 
 /**
  * Query the children of a resource.
@@ -85,13 +99,13 @@ const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
  * @returns 
  */
 export async function getResourceChildren(courseSlug: string, path: string[]) {
-  let resId = await parseResourceId(courseSlug, path);
-  if (!resId) {
+  let res = await getResource(courseSlug, path);
+  if (!res) {
     return null;
   }
 
   return await prisma.resource.findMany({
-    where: { parentId: resId },
+    where: { parentId: res.id },
     ...augumentedResource,
     orderBy: [
       { type: "desc" },
@@ -143,4 +157,40 @@ export async function getResourcePath(courseSlug: string, urlPath: string[]): Pr
   }
 
   return path;
+}
+
+// /**
+//  * Get the root resource of a resource tree.
+//  * @param res the start resource node
+//  * @returns
+//  */
+// export async function getResourceRoot(res: Resource) {
+//   let parentId = res.parentId;
+//   while (parentId != null) {
+//     let temp = await prisma.resource.findUnique({
+//       where: { id: parentId }
+//     });
+
+//     if (temp == null) {
+//       return null;
+//     }
+
+//     parentId = temp.parentId;
+//   }
+
+//   return res;
+// }
+
+/**
+ * Get all enrolled students in a course.
+ * @param course the specified course
+ * @returns 
+ */
+export async function getCourseEnrolledStudents(course: Course) {
+  return await prisma.user.findMany({
+    where: {
+      role: "student",
+      lists: { some: { enroledCourses: { some: { slug: course.slug } } } }
+    }
+  });
 }
