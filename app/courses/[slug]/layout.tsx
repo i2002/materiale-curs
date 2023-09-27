@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import ResourceList from "./components/ResourceList";
 
 type Props = {
-  params: { slug: string, res_id?: string }
+  params: { slug: string }
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
@@ -19,7 +19,7 @@ export async function generateMetadata(
   return {
     title: {
       template: `%s - ${course?.name}`,
-      default: course?.name ?? ""
+      default: course?.name ?? "Materiale curs"
     }
   }
 }
