@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CubeIcon } from "@heroicons/react/24/outline";
 
 export default async function Header({ title }: { title: string }) {
   return (
@@ -6,11 +7,9 @@ export default async function Header({ title }: { title: string }) {
       <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-shrink-0 items-center text-white text-xl">
-            {/* <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-              alt="Your Company"
-            /> */}
+            <Link href="/courses">
+              <CubeIcon className="h-10 w-10 mr-1 hover:bg-slate-700/70 p-2 rounded-full transition-colors"></CubeIcon>
+            </Link>
             <Link href="/courses">
               <h1>{title}</h1>
             </Link>
