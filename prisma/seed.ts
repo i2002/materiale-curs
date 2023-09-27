@@ -51,10 +51,35 @@ async function main() {
         }
     });
 
+    let course1 = await prisma.course.upsert({
+        where: { slug: "autocad" },
+        update: {},
+        create: {
+            name: "Autocad",
+            slug: "autocad",
+            year: 1,
+            semester: 2,
+            enrolments: { connect: { id: list1.id } },
+        }
+    });
+
+    let course2 = await prisma.course.upsert({
+        where: { slug: "retele1" },
+        update: {},
+        create: {
+            name: "Retele 1",
+            slug: "retele1",
+            year: 2,
+            semester: 1,
+            enrolments: { connect: { id: list1.id } },
+        }
+    });
+
     let rootFolder = await prisma.resource.create({
         data: {
             name: "",
-            type: "folder"
+            type: "folder",
+            course: { connect: { slug: course1.slug } }
         }
     });
 
@@ -64,7 +89,8 @@ async function main() {
             type: "folder",
             parent: {
                 connect: { id: rootFolder.id }
-            }
+            },
+            course: { connect: { slug: course1.slug } }
         }
     });
 
@@ -74,7 +100,8 @@ async function main() {
             type: "folder",
             parent: {
                 connect: { id: rootFolder.id }
-            }
+            },
+            course: { connect: { slug: course1.slug } }
         }
     });
 
@@ -89,7 +116,8 @@ async function main() {
                     size: 13
                 }
             },
-            parent: { connect: { id: rootFolder.id } }
+            parent: { connect: { id: rootFolder.id } },
+            course: { connect: { slug: course1.slug } }
         }
     });
 
@@ -104,20 +132,8 @@ async function main() {
                     size: 13
                 }
             },
-            parent: { connect: { id: folder1.id } }
-        }
-    });
-
-    let course1 = await prisma.course.upsert({
-        where: { slug: "autocad" },
-        update: {},
-        create: {
-            name: "Autocad",
-            slug: "autocad",
-            year: 1,
-            semester: 2,
-            enrlolments: { connect: { id: list1.id } },
-            rootFolder: { connect: { id: rootFolder.id }}
+            parent: { connect: { id: folder1.id } },
+            course: { connect: { slug: course1.slug } }
         }
     });
 
@@ -132,4 +148,4 @@ main()
         console.error(e)
         await prisma.$disconnect()
         process.exit(1)
-    })
+    });

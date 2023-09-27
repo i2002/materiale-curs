@@ -70,15 +70,16 @@ model VerificationToken {
 }
 
 model Resource {
-  id       String  @id @default(cuid())
-  name     String
-  type     String  @default("folder")
-  parentId String?
+  id         String  @id @default(cuid())
+  name       String
+  type       String  @default("folder")
+  parentId   String?
+  courseSlug String
 
   parent   Resource?  @relation("resourceTree", fields: [parentId], references: [id], onDelete: Cascade)
   children Resource[] @relation("resourceTree")
   fileData FileData?  @relation()
-  course   Course?
+  course   Course     @relation(fields: [courseSlug], references: [slug])
 }
 
 model FileData {
@@ -92,15 +93,14 @@ model FileData {
 }
 
 model Course {
-  slug           String        @id
+  slug           String @id
   name           String
   year           Int
   semester       Int
-  specialization String        @default("CTI")
-  rootFolderId   String        @unique
+  specialization String @default("CTI")
 
-  enrlolments    StudentList[]
-  rootFolder     Resource      @relation(fields: [rootFolderId], references: [id])
+  enrolments StudentList[]
+  resources  Resource[]
 }
 
 model StudentList {
