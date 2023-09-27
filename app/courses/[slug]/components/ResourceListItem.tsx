@@ -27,8 +27,8 @@ const getHref = (res: Resource, slug: string) => {
 
 // FIXME: friendly format for kb size
 const getSize = (res: AugumentedResource) => res.type == "folder" ? 
-res._count.children ?? "-" :  
-`${res.fileData?.size} kb` ?? "-";
+  res._count.children ?? "-" :  
+  `${res.fileData?.size} kb` ?? "-";
 
 export default function ResourceListItem({ resource, slug }: { resource: AugumentedResource, slug: string }) {
   return (
