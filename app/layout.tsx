@@ -18,7 +18,6 @@ export default async function RootLayout({
   return (
     <html lang="en" className='h-full bg-slate-200 dark:bg-gray-950'>
       <body className={`${inter.className} flex min-h-screen flex-col items-stretch`}>
-        <Header title='Materiale curs'></Header>
         {children}
       </body>
     </html>
