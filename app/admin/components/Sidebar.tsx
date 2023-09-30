@@ -6,7 +6,8 @@ import Link from "next/link";
 import links, { LinkItem } from "../links";
 
 export default function Sidebar() {
-  const isActive = (item: LinkItem) => usePathname().startsWith(item.path);
+  const pathname = usePathname();
+  const isActive = (item: LinkItem) => pathname.startsWith(item.path);
 
   return (
     <div className="bg-white w-60 h-screen">
