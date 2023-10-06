@@ -9,9 +9,11 @@ export default async function AdminLayout({
   return (
     <div className="flex">
       <Sidebar></Sidebar>
-      <div className="flex flex-col items-stretch w-full">
+      <div className="flex flex-col items-stretch w-full max-h-screen">
         <AdminHeader></AdminHeader>
-        {children}
+        <div className="overflow-auto">
+          {children}
+        </div>
       </div>
     </div>
   );
