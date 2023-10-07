@@ -1,11 +1,9 @@
 import { cache } from "react";
-import { getCurrentUser } from "./usersController";
+import { hasAdminPermission } from "./usersController";
 import prisma from "./prisma";
 
 export const getStudentLists = cache(async () => {
-  let user = await getCurrentUser();
-
-  if (!user || user.role != "admin") {
+  if (!hasAdminPermission()) {
     return [];
   }
 

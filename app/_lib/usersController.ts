@@ -123,3 +123,8 @@ export const hasCoursePermission = cache(async (course: Course) => {
   let students = await getCourseEnrolledStudents(course);
   return students.find(item => item.email === user?.email);
 });
+
+export const hasAdminPermission = cache(async () => {
+  let user = await getCurrentUser();
+  return user && user.role === "admin";
+});
