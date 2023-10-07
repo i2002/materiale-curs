@@ -29,6 +29,20 @@ export async function createUser(username: string, password: string, role: strin
 }
 
 /**
+ * Delete all students which are not in any list.
+ *
+ * @returns 
+ */
+export async function deleteOrphanStudents() {
+  return await prisma.user.deleteMany({
+    where: { 
+      role: "student",
+      lists: { none: {} }
+    },
+  });
+}
+
+/**
  * Check if the user is permitted to log in.
  * Only accounts that are already created are allowed to be logged in.
  *
@@ -128,3 +142,9 @@ export const hasAdminPermission = cache(async () => {
   let user = await getCurrentUser();
   return user && user.role === "admin";
 });
+
+export async function adminPermissionOrThrow() {
+  if(!await hasAdminPermission()) {
+    throw "Unauthenticated";
+  }
+}

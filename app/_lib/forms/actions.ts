@@ -2,10 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { studentListFormSchema } from "./form_schemas";
-import prisma from "../prisma";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import { createStudentList, deleteStudentList, updateStudentList } from "../studentListController";
 
-export async function createStudentList(values: {[key: string]: string}) {
+/**
+ * Create student list server action.
+ *
+ * @param values form input
+ * @returns 
+ */
+export async function createStudentListAction(values: {[key: string]: string}) {
   let data;
   try {
     data = await studentListFormSchema.validate(values);
@@ -16,19 +22,8 @@ export async function createStudentList(values: {[key: string]: string}) {
     };
   }
 
-  let studentEmails = data.emails && data.emails != "" ? data.emails?.split(";") : [];
   try {
-    await prisma.studentList.create({
-      data: {
-        name: data.listName,
-        students: {
-          connectOrCreate: studentEmails.map(email => ({
-            where: { email: email },
-            create: { email: email }
-          }))
-        }
-      }
-    });
+    createStudentList(data.listName, data.emails);
   } catch (e) {
     console.error(e); // FIXME: error logging
 
@@ -44,11 +39,60 @@ export async function createStudentList(values: {[key: string]: string}) {
   revalidatePath("/admin/students/");
 }
 
-export async function deleteStudentList(listId: number) {
+
+/**
+ * Update student list server action.
+ *
+ * @param listId the id of the updated list
+ * @param values form input
+ * @returns 
+ */
+export async function updateStudentListAction(listId: number, values: {[key: string]: string}) {
+  // validate input
+  let data;
   try {
-    await prisma.studentList.delete({
-      where: { id: listId }
-    });
+    data = await studentListFormSchema.validate(values);
+  } catch (err) {
+    console.log(err); // FIXME: error logging
+    return {
+      error: "Eroare la validare date"
+    };
+  }
+
+  try {
+    await updateStudentList(listId, data.listName, data.emails);
+  } catch (e) {
+    console.error(e); // FIXME: error logging
+
+    let message = "Eroare la creare listă. Încercați din nou.";
+    if (e instanceof PrismaClientKnownRequestError) {
+      switch(e.code) {
+        case "P2002":
+          message = "Nume listă existent.";
+          break;
+
+        case "P2025":
+          message = "Lista nu a fost găsită.";
+          break;
+      }
+    }
+    return {
+      error: message
+    };
+  }
+
+  revalidatePath("/admin/students");
+}
+
+
+/**
+ * Delete student list server action.
+ *
+ * @param listId the id of the list to be deleted
+ */
+export async function deleteStudentListAction(listId: number) {
+  try {
+    await deleteStudentList(listId);
   } catch(error) {
     if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
       console.log("Unknown list id.");

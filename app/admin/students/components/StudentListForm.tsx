@@ -1,15 +1,23 @@
 'use client'
 
-import { createStudentList } from "@/app/_lib/forms/actions";
+import { createStudentListAction, updateStudentListAction } from "@/app/_lib/forms/actions";
 import { studentListFormSchema } from "@/app/_lib/forms/form_schemas";
+import { StudentListWithStudents } from "@/app/_lib/studentListController";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { Button, Callout, Card, Title } from "@tremor/react";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
 
-const submitHandler = async (values: {[key: string]: string}, { setStatus }: { setStatus: (status?: any) => void}, router: AppRouterInstance) => {
-  let res = await createStudentList(values);
+interface Props {
+  list: StudentListWithStudents | undefined;
+}
+
+const submitHandler = async (values: {[key: string]: string}, setStatus: (status?: any) => void, router: AppRouterInstance, list: StudentListWithStudents | undefined) => {
+  let res = list ? 
+    await updateStudentListAction(list.id, values) :
+    await createStudentListAction(values);
+
   if (res) {
     setStatus(res?.error ?? undefined);
   } else {
@@ -17,18 +25,18 @@ const submitHandler = async (values: {[key: string]: string}, { setStatus }: { s
   }
 }
 
-export function StudentListForm() {
-  let router = useRouter();
+export function StudentListForm({ list }: Props) {
+  const router = useRouter();
 
   return (
     <Card>
       <Formik
         initialValues={{
-          listName: '',
-          emails: '',
+          listName: list?.name ?? '',
+          emails: list?.students.map(stud => stud.email).join(";") ?? ''
         }}
         validationSchema={studentListFormSchema}
-        onSubmit={(values, actions) => submitHandler(values, actions, router)}
+        onSubmit={(values, actions) => submitHandler(values, actions.setStatus, router, list)}
       >
         {({ isSubmitting, status, errors, touched }) => (
           <Form>
@@ -48,7 +56,7 @@ export function StudentListForm() {
               <ErrorMessage name="emails" component="p" className="mt-1 text-sm text-red-500" />
             </div>
             <Button type="submit" disabled={isSubmitting} color="teal" size="xs">
-              Adăugare listă
+              {list ? "Modificare listă" : "Adăugare listă"}
             </Button>
           </Form>
         )}

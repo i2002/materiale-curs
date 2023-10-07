@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteStudentList } from "@/app/_lib/forms/actions";
+import { deleteStudentListAction } from "@/app/_lib/forms/actions";
 import { StudentList } from "@prisma/client";
 import { Button, Text, Title } from "@tremor/react";
 import { useRouter } from "next/navigation";
@@ -12,9 +12,10 @@ interface Props {
 export default function StudentListDeleteForm({ list }: Props) {
   const router = useRouter();
   const deleteHandler = async () => {
-    await deleteStudentList(list.id);
+    await deleteStudentListAction(list.id);
     router.back();
   }
+
   return (
     <>
       <Title className="text-center">Confirmare ștergere</Title>
