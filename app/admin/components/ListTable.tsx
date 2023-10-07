@@ -24,11 +24,22 @@ interface Props {
 
 interface ContentProps {
   getItems: GetTableItems;
+  cols: number;
 }
 
-const RenderItems = async ({ getItems }: ContentProps) => (await getItems()).map(item => (
-  <ListTableItem item={item} key={item.data[0]}></ListTableItem>
-));
+
+const EmptyRow = ({ cols }: { cols: number }) => (
+  <TableRow>
+    <TableCell colSpan={cols + 1} className="text-center">Nu există date.</TableCell>
+  </TableRow>
+);
+
+const RenderItems = async ({ getItems, cols }: ContentProps) => {
+  let items = await getItems();
+  return items.length ? items.map(item => (
+    <ListTableItem item={item} key={item.data[0]}></ListTableItem>
+  )) : <EmptyRow cols={cols}></EmptyRow>;
+}
 
 export default function ListTable({ columns, getItems }: Props) {
   return (
@@ -44,7 +55,7 @@ export default function ListTable({ columns, getItems }: Props) {
         </TableHead>
         <TableBody>
           <Suspense fallback={<LoadingListTableItem nr_cols={columns.length + 1} nr_rows={3}></LoadingListTableItem>}>
-            <RenderItems getItems={getItems}></RenderItems>
+            <RenderItems getItems={getItems} cols={columns.length}></RenderItems>
           </Suspense>
         </TableBody>
       </Table>
