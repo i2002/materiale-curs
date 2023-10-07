@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { Course, Prisma, Resource } from "@prisma/client";
-import prisma from "./prisma";
+import prisma from "../prisma";
 import { getCurrentUser, hasCoursePermission } from "./usersController";
 
 /**

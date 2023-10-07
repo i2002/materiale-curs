@@ -1,9 +1,9 @@
-import HeroBanner from "@/app/_components/HeroBanner"
-import { getCourse } from "@/app/_lib/courseController"
+import HeroBanner from "@/components/ui/HeroBanner"
+import { getCourse } from "@/lib/controllers/courseController"
 import { Card } from "@tremor/react";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import ResourceList from "./components/ResourceList";
+import ResourceList from "@/components/courses/ResourceList";
 
 type Props = {
   params: { slug: string }

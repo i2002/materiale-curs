@@ -1,7 +1,7 @@
 import { Grid } from "@tremor/react";
-import HeroBanner from "../_components/HeroBanner";
-import CourseCard from "./_components/CourseCard";
-import { getCourses } from "../_lib/courseController";
+import HeroBanner from "@/components/ui/HeroBanner";
+import CourseCard from "@/components/courses/CourseCard";
+import { getCourses } from "@/lib/controllers/courseController";
 import { Suspense } from "react";
 
 const CourseList = async () => {

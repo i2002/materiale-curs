@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteStudentListAction } from "@/app/_lib/forms/actions";
+import { deleteStudentListAction } from "@/lib/actions/studentListActions";
 import { StudentList } from "@prisma/client";
 import { Button, Text, Title } from "@tremor/react";
 import { useRouter } from "next/navigation";

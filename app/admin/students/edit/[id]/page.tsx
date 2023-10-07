@@ -1,7 +1,7 @@
-import { getStudentList } from "@/app/_lib/studentListController";
+import { getStudentList } from "@/lib/controllers/studentListController";
 import { Title } from "@tremor/react";
 import { notFound } from "next/navigation";
-import { StudentListForm } from "../../components/StudentListForm";
+import { StudentListForm } from "@/components/admin/forms/StudentListForm";
 
 type Props = {
   params: { id: string }

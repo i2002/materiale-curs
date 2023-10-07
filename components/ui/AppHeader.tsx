@@ -1,7 +1,11 @@
 import Link from "next/link";
 import { CubeIcon } from "@heroicons/react/24/outline";
 
-export default async function Header({ title }: { title: string }) {
+interface Props {
+  title: string;
+}
+
+export default async function Header({ title }: Props) {
   return (
     <nav className="bg-slate-800">
       <div className="mx-auto max-w-8xl px-2 sm:px-6 lg:px-8">

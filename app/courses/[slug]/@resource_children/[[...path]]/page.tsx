@@ -1,6 +1,6 @@
-import { getResource, getResourceChildren } from "@/app/_lib/courseController";
+import { getResource, getResourceChildren } from "@/lib/controllers/courseController";
 import { notFound } from "next/navigation";
-import ResourceListItem from "../../components/ResourceListItem";
+import ResourceListItem from "@/components/courses/ResourceListItem";
 
 type Props = {
   params: { slug: string, path: string[] }

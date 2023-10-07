@@ -1,7 +1,7 @@
-import { getStudentLists } from "@/app/_lib/studentListController";
+import { getStudentLists } from "@/lib/controllers/studentListController";
 // import { Button } from "@tremor/react";
 import Link from "next/link";
-import ListTable from "../components/ListTable";
+import ListTable from "@/components/admin/dataView/ListTable";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
 const cols = [

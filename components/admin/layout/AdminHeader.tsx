@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import links from "../links";
+import links from "../../../app/admin/links";
 
 export default function Header() {
   let pathname = usePathname();

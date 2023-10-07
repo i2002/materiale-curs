@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { studentListFormSchema } from "./form_schemas";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { createStudentList, deleteStudentList, updateStudentList } from "../studentListController";
+import { createStudentList, deleteStudentList, updateStudentList } from "../controllers/studentListController";
 
 /**
  * Create student list server action.

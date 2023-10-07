@@ -1,4 +1,4 @@
-import Header from "../_components/Header";
+import Header from "@/components/ui/AppHeader";
 
 export default async function StudentDashboardLayout({
   children

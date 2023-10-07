@@ -3,8 +3,8 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import Credentials from 'next-auth/providers/credentials'
 import AzureADProvider from "next-auth/providers/azure-ad";
 import EmailProvider from "next-auth/providers/email";
-import prisma from "@/app/_lib/prisma";
-import { checkSignIn, signInAllowed } from "./usersController";
+import prisma from "@/lib/prisma";
+import { checkSignIn, signInAllowed } from "./controllers/usersController";
 import { Role } from "@/types.d";
 
 

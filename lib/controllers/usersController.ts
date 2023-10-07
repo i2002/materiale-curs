@@ -1,11 +1,11 @@
 import { User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
-import prisma from "./prisma";
+import prisma from "../prisma";
 import bcrypt from "bcrypt";
 import { cache} from "react";
 import { Role } from "@/types";
 import { Course, Resource } from "@prisma/client";
-import { getUserSession } from "./auth";
+import { getUserSession } from "../auth";
 import { getCourseEnrolledStudents } from "./courseController";
 
 /**

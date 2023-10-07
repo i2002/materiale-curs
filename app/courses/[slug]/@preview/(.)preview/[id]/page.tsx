@@ -1,4 +1,4 @@
-import Modal from "@/app/_components/Modal";
+import Modal from "@/components/ui/Modal";
 
 export default function Page() {
   return (

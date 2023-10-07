@@ -1,6 +1,6 @@
 import { cache } from "react";
 import { adminPermissionOrThrow, deleteOrphanStudents, hasAdminPermission } from "./usersController";
-import prisma from "./prisma";
+import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
 
 

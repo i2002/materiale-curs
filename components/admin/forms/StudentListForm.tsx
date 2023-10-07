@@ -1,8 +1,8 @@
 'use client'
 
-import { createStudentListAction, updateStudentListAction } from "@/app/_lib/forms/actions";
-import { studentListFormSchema } from "@/app/_lib/forms/form_schemas";
-import { StudentListWithStudents } from "@/app/_lib/studentListController";
+import { createStudentListAction, updateStudentListAction } from "@/lib/actions/studentListActions";
+import { studentListFormSchema } from "@/lib/actions/form_schemas";
+import { StudentListWithStudents } from "@/lib/controllers/studentListController";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { Button, Callout, Card, Title } from "@tremor/react";
 import { Formik, Field, Form, ErrorMessage } from 'formik';

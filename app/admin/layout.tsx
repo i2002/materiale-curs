@@ -1,5 +1,5 @@
-import AdminHeader from "./components/AdminHeader";
-import Sidebar from "./components/Sidebar";
+import AdminHeader from "@/components/admin/layout/AdminHeader";
+import Sidebar from "@/components/admin/layout/Sidebar";
 
 export default async function AdminLayout({
   children

@@ -1,4 +1,4 @@
-import { getResource } from "@/app/_lib/courseController";
+import { getResource } from "@/lib/controllers/courseController";
 import { Metadata, ResolvingMetadata } from "next";
 
 interface Props {

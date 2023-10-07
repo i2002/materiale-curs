@@ -3,7 +3,7 @@
 import { Title } from "@tremor/react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import links, { LinkItem } from "../links";
+import links, { LinkItem } from "../../../app/admin/links";
 
 export default function Sidebar() {
   const pathname = usePathname();

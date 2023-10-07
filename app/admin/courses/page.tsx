@@ -1,5 +1,5 @@
 import { Button } from "@tremor/react";
-import ListTable from "../components/ListTable";
+import ListTable from "@/components/admin/dataView/ListTable";
 import Link from "next/link";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
