@@ -6,7 +6,7 @@ import ListTableItem from "./ListTableItem";
 interface ActionButton {
   name: string;
   icon: React.ReactNode;
-  // handler: () => void;
+  href: string;
 }
 
 export interface TableItem {

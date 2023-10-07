@@ -2,6 +2,7 @@ import { getStudentLists } from "@/app/_lib/studentListController";
 // import { Button } from "@tremor/react";
 import Link from "next/link";
 import ListTable from "../components/ListTable";
+import { TrashIcon } from "@heroicons/react/20/solid";
 
 const cols = [
   "Nume listă",
@@ -16,8 +17,12 @@ const getItems = async () => {
       list.name,
       String(list._count.students)
     ],
-    actions: [],
-    href: "#"
+    actions: [{
+      name: "Delete",
+      icon: <TrashIcon />,
+      href: `/admin/students/delete/${list.id}`
+    }],
+    href: `/admin/students/edit/${list.id}`
   }));
 }
 

@@ -13,9 +13,11 @@ const ListTableItem = ({ item }: { item: TableItem }) => (
     ))}
     <TableCell>
       {item.actions.map(btn => (
-        <button key={btn.name} title={btn.name} className="h-4 w-4 flex items-center">
-          {btn.icon}
-        </button>
+        <Link href={btn.href}>
+          <button key={btn.name} title={btn.name} className="h-4 w-4 flex items-center">
+            {btn.icon}
+          </button>
+        </Link>
       ))}
     </TableCell>
   </TableRow>

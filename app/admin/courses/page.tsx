@@ -16,12 +16,12 @@ const getItems = async () => {
   return [
     {
       data: ["Autocad", "1", "2", "CTI"],
-      actions: [ { name: "Delete", icon: <TrashIcon></TrashIcon> } ],
+      actions: [ { name: "Delete", icon: <TrashIcon></TrashIcon>, href: "#" } ],
       href: "/admin/courses/edit/1"
     },
     {
       data: ["FRC", "2", "1", "CTI"],
-      actions: [ { name: "Delete", icon: <TrashIcon></TrashIcon> } ],
+      actions: [ { name: "Delete", icon: <TrashIcon></TrashIcon>, href: "#" } ],
       href: "/admin/courses/edit/2"
     }
   ];
