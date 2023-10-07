@@ -19,3 +19,7 @@
     @apply block w-full rounded-md border-slate-300 shadow-sm focus:border-teal-400 focus:ring focus:ring-teal-300 focus:ring-opacity-50 disabled:cursor-not-allowed disabled:bg-slate-50;
   }
 }
+
+.data-table table {
+  @apply table-fixed
+}

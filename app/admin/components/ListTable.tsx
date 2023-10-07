@@ -33,11 +33,11 @@ const RenderItems = async ({ getItems }: ContentProps) => (await getItems()).map
 export default function ListTable({ columns, getItems }: Props) {
   return (
     <Card className="py-4">  
-      <Table>
+      <Table className="data-table">
         <TableHead>
           <TableRow>
-            {columns.map(col => (
-              <TableHeaderCell key={col}>{col}</TableHeaderCell>
+            {columns.map((col, index) => (
+              <TableHeaderCell className={index == 0 ? "w-full" : "w-40"} key={col}>{col}</TableHeaderCell>
             ))}
             <TableHeaderCell className="w-10"></TableHeaderCell>
           </TableRow>
