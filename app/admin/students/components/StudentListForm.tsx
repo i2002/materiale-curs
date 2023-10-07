@@ -5,9 +5,10 @@ import { studentListFormSchema } from "@/app/_lib/forms/form_schemas";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { Button, Callout, Card, Title } from "@tremor/react";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
-import { redirect, useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 
-const submitHandler = async (values: {[key: string]: string}, { setStatus }: { setStatus: (status?: any) => void}, router) => {
+const submitHandler = async (values: {[key: string]: string}, { setStatus }: { setStatus: (status?: any) => void}, router: AppRouterInstance) => {
   let res = await createStudentList(values);
   if (res) {
     setStatus(res?.error ?? undefined);
