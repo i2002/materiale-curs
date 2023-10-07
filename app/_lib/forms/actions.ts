@@ -43,3 +43,19 @@ export async function createStudentList(values: {[key: string]: string}) {
 
   revalidatePath("/admin/students/");
 }
+
+export async function deleteStudentList(listId: number) {
+  try {
+    await prisma.studentList.delete({
+      where: { id: listId }
+    });
+  } catch(error) {
+    if (error instanceof PrismaClientKnownRequestError && error.code === "P2025") {
+      console.log("Unknown list id.");
+    } else {
+      console.error(error); // FIXME: error logging
+    }
+  }
+
+  revalidatePath("/admin/students");
+}

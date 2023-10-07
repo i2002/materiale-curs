@@ -20,3 +20,18 @@ export const getStudentLists = cache(async () => {
     }
   });
 });
+
+export const getStudentList = cache(async (listId: number) => {
+  if (!hasAdminPermission()) {
+    return null;
+  }
+
+  let list = await prisma.studentList.findUnique({
+    where: { id: listId },
+    include: {
+      students: true
+    }
+  });
+
+  return list;
+});
