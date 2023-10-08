@@ -54,12 +54,28 @@ export const getCourses = cache(async () => {
 
 /**
  * Query a course info.
+ *
  * @param slug the course slug
- * @returns 
+ * @returns the course or null if not found or insufficient permissions
  */
 export const getCourse = cache(async (slug: string) => {
   let course = await prisma.course.findUnique({
     where: { slug: slug }
+  });
+
+  return course && await hasCoursePermission(course) ? course : null;
+});
+
+
+/**
+ * Query course info by course id.
+ * 
+ * @param id the course id
+ * @returns the course or null if not found or insufficient permissions
+ */
+export const getCourseById = cache(async (id: number) => {
+  let course = await prisma.course.findUnique({
+    where: { id: id }
   });
 
   return course && await hasCoursePermission(course) ? course : null;
