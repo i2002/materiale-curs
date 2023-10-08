@@ -67,7 +67,7 @@ export function CourseForm({ course }: Props) {
         {({ isSubmitting, status, errors, touched }) => (
           <Form>
             {status && (
-              <Callout className="mb-4" title="Eroare la adăugare" icon={ExclamationTriangleIcon}>
+              <Callout className="mb-4" title="Eroare la adăugare" color="rose" icon={ExclamationTriangleIcon}>
                 {status}
               </Callout>
             )}
