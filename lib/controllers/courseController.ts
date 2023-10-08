@@ -49,6 +49,23 @@ export async function updateCourse(id: number, data: Prisma.CourseUpdateInput) {
 
 
 /**
+ * Delete course.
+ *
+ * @param id the id of the course to be deleted
+ */
+export async function deleteCourse(id: number) {
+  // TODO: delete resources
+  await prisma.resource.deleteMany({
+    where: { courseId: id }
+  });
+
+  await prisma.course.delete({
+    where: { id: id }
+  });
+}
+
+
+/**
  * Query all courses info.
  * @returns 
  */

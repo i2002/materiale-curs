@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CourseFormSchema, courseFormSchema } from "./form_schemas";
-import { createCourse, updateCourse } from "../controllers/courseController";
+import { createCourse, deleteCourse, updateCourse } from "../controllers/courseController";
 
 
 /**
@@ -88,4 +88,24 @@ export async function updateCourseAction(courseId: number, values: CourseFormSch
       error: message
     }
   }
+}
+
+
+/**
+ * Delete course server action.
+ * 
+ * @param courseId the id of the course
+ */
+export async function deleteCourseAction(courseId: number) {
+  try {
+    await deleteCourse(courseId);
+  } catch (err) {
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
+      console.log("Unknown list id.");
+    } else {
+      console.error(err); // FIXME: error logging
+    }
+  }
+
+  revalidatePath("/admin/students");
 }
