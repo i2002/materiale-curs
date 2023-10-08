@@ -113,7 +113,7 @@ export const getCurrentUser = cache(async () => {
 
 export const hasResourcePermission = cache(async (res: Resource) => {
   let course = await prisma.course.findUnique({
-    where: { slug: res.courseSlug }
+    where: { id: res.courseId }
   });
 
   if (!course) {
