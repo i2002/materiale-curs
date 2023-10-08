@@ -33,17 +33,17 @@ interface SlugFieldProps extends React.ComponentPropsWithoutRef<"input"> {
 
 const SlugField: React.FC<SlugFieldProps> = (props) => {
   const {
-    values: { name },
+    values: { name, slug },
     touched,
     setFieldValue,
   } = useFormikContext<CourseFormSchema>();
   const [field, meta] = useField(props.name);
 
   React.useEffect(() => {
-    if (name.trim() !== '' && touched.name) {
+    if (name.trim() !== '' && touched.name && slug.trim() === '') {
       setFieldValue(props.name, slugify(name, "_").toLowerCase());
     }
-  }, [name, touched.name, setFieldValue, props.name]);
+  }, [name, slug, touched.name, setFieldValue, props.name]);
 
   return <input {...props} {...field} />;
 };

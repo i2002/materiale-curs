@@ -30,6 +30,25 @@ export async function createCourse(data: Prisma.CourseCreateInput) {
 
 
 /**
+ * Update course.
+ *
+ * @param id the id of the course to update
+ * @param data the new data for the course
+ * @returns the updated course
+ */
+export async function updateCourse(id: number, data: Prisma.CourseUpdateInput) {
+  await adminPermissionOrThrow();
+
+  let course = await prisma.course.update({
+    where: { id: id },
+    data: data
+  });
+
+  return course;
+}
+
+
+/**
  * Query all courses info.
  * @returns 
  */

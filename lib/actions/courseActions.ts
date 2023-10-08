@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CourseFormSchema, courseFormSchema } from "./form_schemas";
-import { createCourse } from "../controllers/courseController";
+import { createCourse, updateCourse } from "../controllers/courseController";
 
 
 /**
@@ -52,6 +52,40 @@ export async function createCourseAction(values: CourseFormSchema) {
  * @returns 
  */
 export async function updateCourseAction(courseId: number, values: CourseFormSchema) {
-  
-  return courseId ? { error: "" } : { courseId: courseId };
+  // validate input
+  let data;
+  try {
+    data = await courseFormSchema.validate(values);
+  } catch (err) {
+    console.log(err); // FIXME: error logging
+    return {
+      error: "Eroare la validare date"
+    }
+  }
+
+  try {
+    let course = await updateCourse(courseId, data);
+    revalidatePath("/admin/courses");
+    revalidatePath("/courses/");
+    return {
+      courseId: course.id
+    };
+  } catch (err) {
+    console.error(err); // FIXME: error logging
+    let message = "Eroare la creare listă. Încercați din nou.";
+    if (err instanceof PrismaClientKnownRequestError) {
+      switch(err.code) {
+        case "P2002":
+          message = "Identificator curs deja existent.";
+          break;
+
+        case "P2025":
+          message = "Cursul nu a fost găsit.";
+          break;
+      }
+    }
+    return {
+      error: message
+    }
+  }
 }
