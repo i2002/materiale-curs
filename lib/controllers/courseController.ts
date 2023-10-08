@@ -1,7 +1,31 @@
 import { cache } from "react";
 import { Course, Prisma, Resource } from "@prisma/client";
 import prisma from "@/lib/prisma";
-import { getCurrentUser, hasCoursePermission } from "./usersController";
+import { adminPermissionOrThrow, getCurrentUser, hasCoursePermission } from "./usersController";
+
+
+/**
+ * Create course.
+ *
+ * @param data new course data
+ * @returns the created course object
+ */
+export async function createCourse(data: Prisma.CourseCreateInput) {
+  await adminPermissionOrThrow();
+
+  return await prisma.course.create({
+    data: {
+      ...data,
+      resources: {
+        create: [{
+          name: `Root ${data.slug}`,
+          type: "folder",
+          parentId: null
+        }]
+      }
+    }
+  });
+}
 
 
 /**
