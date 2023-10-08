@@ -1,12 +1,13 @@
 import { User } from "next-auth";
 import { AdapterUser } from "next-auth/adapters";
-import prisma from "../prisma";
 import bcrypt from "bcrypt";
 import { cache} from "react";
-import { Role } from "@/types";
 import { Course, Resource } from "@prisma/client";
-import { getUserSession } from "../auth";
+import { Role } from "@/types";
+import prisma from "@/lib/prisma";
+import { getUserSession } from "@/lib/auth";
 import { getCourseEnrolledStudents } from "./courseController";
+
 
 /**
  * Create a new user.
@@ -28,6 +29,7 @@ export async function createUser(username: string, password: string, role: strin
   });
 }
 
+
 /**
  * Delete all students which are not in any list.
  *
@@ -41,6 +43,7 @@ export async function deleteOrphanStudents() {
     },
   });
 }
+
 
 /**
  * Check if the user is permitted to log in.
@@ -62,6 +65,7 @@ export async function signInAllowed(user: AdapterUser | User) {
 
   return false;
 }
+
 
 /**
  * Authorize credential signin.
@@ -96,6 +100,7 @@ export async function checkSignIn(credentials: Record<"username" | "password", s
   }
 }
 
+
 /**
  * Get the current user as valid database entry.
  * @returns 
@@ -111,6 +116,13 @@ export const getCurrentUser = cache(async () => {
   return null;
 });
 
+
+/**
+ * Checks if the current user has permission to acces the specified resource.
+ * 
+ * @param res the resource
+ * @returns true if the current user has permission, false otherwise
+ */
 export const hasResourcePermission = cache(async (res: Resource) => {
   let course = await prisma.course.findUnique({
     where: { id: res.courseId }
@@ -123,6 +135,13 @@ export const hasResourcePermission = cache(async (res: Resource) => {
   return hasCoursePermission(course);
 });
 
+
+/**
+ * Checks if the current user has permission to acces the specified course.
+ * 
+ * @param course the course
+ * @returns true if the current user has permission, false otherwise
+ */
 export const hasCoursePermission = cache(async (course: Course) => {
   let user = await getCurrentUser();
 
@@ -138,11 +157,21 @@ export const hasCoursePermission = cache(async (course: Course) => {
   return students.find(item => item.email === user?.email);
 });
 
+
+/**
+ * Checks if the current user has admin permissions.
+ * 
+ * @returns true if the current user is admin, false otherwise
+ */
 export const hasAdminPermission = cache(async () => {
   let user = await getCurrentUser();
   return user && user.role === "admin";
 });
 
+
+/**
+ * Throw an exception if the current user is not an admin.
+ */
 export async function adminPermissionOrThrow() {
   if(!await hasAdminPermission()) {
     throw "Unauthenticated";
