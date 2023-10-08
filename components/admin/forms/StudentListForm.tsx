@@ -1,10 +1,10 @@
 'use client'
 
 import { createStudentListAction, updateStudentListAction } from "@/lib/actions/studentListActions";
-import { studentListFormSchema } from "@/lib/actions/form_schemas";
+import { StudentListFormSchema, studentListFormSchema } from "@/lib/actions/form_schemas";
 import { StudentListWithStudents } from "@/lib/controllers/studentListController";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { Button, Callout, Card, Title } from "@tremor/react";
+import { Button, Callout, Card } from "@tremor/react";
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter } from "next/navigation";
@@ -13,7 +13,7 @@ interface Props {
   list: StudentListWithStudents | undefined;
 }
 
-const submitHandler = async (values: {[key: string]: string}, setStatus: (status?: any) => void, router: AppRouterInstance, list: StudentListWithStudents | undefined) => {
+const submitHandler = async (values: StudentListFormSchema, setStatus: (status?: any) => void, router: AppRouterInstance, list: StudentListWithStudents | undefined) => {
   let res = list ? 
     await updateStudentListAction(list.id, values) :
     await createStudentListAction(values);

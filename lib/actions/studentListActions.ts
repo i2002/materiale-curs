@@ -1,7 +1,7 @@
 "use server"
 
 import { revalidatePath } from "next/cache";
-import { studentListFormSchema } from "./form_schemas";
+import { StudentListFormSchema, studentListFormSchema } from "./form_schemas";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { createStudentList, deleteStudentList, updateStudentList } from "../controllers/studentListController";
 
@@ -11,7 +11,7 @@ import { createStudentList, deleteStudentList, updateStudentList } from "../cont
  * @param values form input
  * @returns 
  */
-export async function createStudentListAction(values: {[key: string]: string}) {
+export async function createStudentListAction(values: StudentListFormSchema) {
   let data;
   try {
     data = await studentListFormSchema.validate(values);
