@@ -74,12 +74,12 @@ model Resource {
   name       String
   type       String  @default("folder")
   parentId   String?
-  courseSlug String
+  courseId   Int
 
   parent   Resource?  @relation("resourceTree", fields: [parentId], references: [id], onDelete: Cascade)
   children Resource[] @relation("resourceTree")
   fileData FileData?  @relation()
-  course   Course     @relation(fields: [courseSlug], references: [slug])
+  course   Course     @relation(fields: [courseId], references: [id])
 }
 
 model FileData {
@@ -93,7 +93,8 @@ model FileData {
 }
 
 model Course {
-  slug           String @id
+  id             Int    @id @default(autoincrement())
+  slug           String @unique
   name           String
   year           Int
   semester       Int
