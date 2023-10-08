@@ -13,18 +13,19 @@ import { adminPermissionOrThrow, getCurrentUser, hasCoursePermission } from "./u
 export async function createCourse(data: Prisma.CourseCreateInput) {
   await adminPermissionOrThrow();
 
-  return await prisma.course.create({
+  // create course
+  let course = await prisma.course.create({ data: data });
+  
+  // create course root folder
+  await prisma.resource.create({
     data: {
-      ...data,
-      resources: {
-        create: [{
-          name: `Root ${data.slug}`,
-          type: "folder",
-          parentId: null
-        }]
-      }
+      name: `Root for course ${course.id}`,
+      courseId: course.id,
+      parentId: null
     }
   });
+
+  return course;
 }
 
 
