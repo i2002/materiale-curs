@@ -13,7 +13,7 @@ const getEmails = (emails: string | undefined) => emails && emails != "" ? email
  * @param emails the emails of the students to be added to the list (separated by ;)
  */
 export async function createStudentList(name: string, emails: string | undefined) {
-  adminPermissionOrThrow();
+  await adminPermissionOrThrow();
   let studentEmails = getEmails(emails);
 
   await prisma.studentList.create({
@@ -48,7 +48,7 @@ const getPrevEmails = async (id: number) =>  {
  * @param emails the new emails list (separated by ;)
  */
 export async function updateStudentList(id: number, name: string, emails: string | undefined) {
-  adminPermissionOrThrow();
+  await adminPermissionOrThrow();
 
   // current and previous email list
   let studentEmails = getEmails(emails);
@@ -97,7 +97,7 @@ export async function deleteStudentList(id: number) {
  * Get all student lists.
  */
 export const getStudentLists = cache(async () => {
-  if (!hasAdminPermission()) {
+  if (!await hasAdminPermission()) {
     return [];
   }
 
@@ -123,7 +123,7 @@ export const getStudentLists = cache(async () => {
  * @returns the selected list or null if not found
  */
 export const getStudentList = cache(async (listId: number) => {
-  if (!hasAdminPermission()) {
+  if (!await hasAdminPermission()) {
     return null;
   }
 

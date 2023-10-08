@@ -23,7 +23,7 @@ export async function createStudentListAction(values: StudentListFormSchema) {
   }
 
   try {
-    createStudentList(data.listName, data.emails);
+    await createStudentList(data.listName, data.emails);
   } catch (e) {
     console.error(e); // FIXME: error logging
 
