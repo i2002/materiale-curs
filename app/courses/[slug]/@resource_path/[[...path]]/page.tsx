@@ -1,4 +1,4 @@
-import { getResourcePath } from "@/lib/controllers/courseController";
+import { getResourcePath } from "@/lib/controllers/resourceController";
 import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react"
 import { Text } from "@tremor/react";

@@ -1,4 +1,4 @@
-import { getResource, getResourceChildren } from "@/lib/controllers/courseController";
+import { getResourceChildren } from "@/lib/controllers/resourceController";
 import { notFound } from "next/navigation";
 import ResourceListItem from "@/components/courses/ResourceListItem";
 
