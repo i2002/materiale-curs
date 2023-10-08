@@ -80,6 +80,8 @@ model Resource {
   children Resource[] @relation("resourceTree")
   fileData FileData?  @relation()
   course   Course     @relation(fields: [courseId], references: [id])
+
+  @@unique([name, parentId])
 }
 
 model FileData {
