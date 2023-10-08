@@ -1,3 +1,3 @@
 export default function Page() {
-  return "Create course";
+  return "Delete course";
 }
