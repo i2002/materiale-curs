@@ -1,7 +1,7 @@
 import { cache } from "react";
-import { adminPermissionOrThrow, deleteOrphanStudents, hasAdminPermission } from "./usersController";
-import prisma from "../prisma";
 import { Prisma } from "@prisma/client";
+import prisma from "@/lib/prisma";
+import { adminPermissionOrThrow, deleteOrphanStudents, hasAdminPermission } from "./usersController";
 
 
 const getEmails = (emails: string | undefined) => emails && emails != "" ? emails?.split(";") : [];
