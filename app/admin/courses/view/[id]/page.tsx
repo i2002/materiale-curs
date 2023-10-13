@@ -17,24 +17,11 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="p-6">
-      <Card className="mt-4 max-w-lg mx-auto">
-        <Title>{course.name}</Title>
-        <List>
-          <ListItem>
-            <span>An</span>
-            <span>{course.year}</span>
-          </ListItem>
-          <ListItem>
-            <span>Semestru</span>
-            <span>{course.semester}</span>
-          </ListItem>
-          <ListItem>
-            <span>Specializare</span>
-            <span>{course.specialization}</span>
-          </ListItem>
-        </List>
-        <LinkButton href={`/admin/courses/edit/${course.id}`}>Modifică informații</LinkButton>
-      </Card>
+      <h2 className="text-2xl">{course.name}</h2>
+      <p className="text-sm text-gray-600 mt-1">
+        Anul {course.year}, Semestrul {course.semester}, Specializarea {course.specialization}
+      </p>
+      <LinkButton href={`/admin/courses/edit/${course.id}`}>Modifică detalii</LinkButton>
     </div>
   );
 }

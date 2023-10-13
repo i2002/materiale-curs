@@ -12,7 +12,7 @@ interface Props {
 export default function LinkButton({ href, children }: Props) {
   return (
     <Link href={href}>
-      <Button variant="light" size="xs" color="teal" className="mt-4" icon={ArrowRightIcon} iconPosition="right">{children}</Button>
+      <Button variant="light" size="xs" color="teal" className="mt-2" icon={ArrowRightIcon} iconPosition="right">{children}</Button>
     </Link>
   );
 }
