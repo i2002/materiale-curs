@@ -21,7 +21,7 @@ const submitHandler = async (values: StudentListFormSchema, setStatus: (status?:
   if (res) {
     setStatus(res?.error ?? undefined);
   } else {
-    router.push("/admin/students/");
+    router.back();
   }
 }
 
