@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/20/solid";
+import { ArrowRightIcon } from "@heroicons/react/20/solid";
 import { Button } from "@tremor/react";
 import Link from "next/link";
 
