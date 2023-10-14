@@ -12,11 +12,11 @@ export default async function CourseViewLayout({
   return (
     <>
       {children}
-      <Card className="mx-6 pt-2 w-auto">
+      <Card className="mx-6 mb-6 pt-2 pb-3 w-auto">
         <TabGroup>
-          <TabList className="">
-            <Tab>Fișiere</Tab>
-            <Tab>Studenți înscriși</Tab>
+          <TabList color="teal">
+            <Tab>Fișiere curs</Tab>
+            <Tab>Liste studenți înscriși</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>{files}</TabPanel>
