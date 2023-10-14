@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CourseFormSchema, courseFormSchema } from "./form_schemas";
-import { createCourse, deleteCourse, updateCourse } from "../controllers/courseController";
+import { createCourse, deleteCourse, linkStudentLists, unlinkStudentLists, updateCourse } from "../controllers/courseController";
 
 
 /**
@@ -101,11 +101,71 @@ export async function deleteCourseAction(courseId: number) {
     await deleteCourse(courseId);
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
-      console.log("Unknown list id.");
+      console.log("Unknown course id.");
     } else {
       console.error(err); // FIXME: error logging
     }
   }
 
   revalidatePath("/admin/students");
+}
+
+
+/**
+ * Link student lists to course action.
+ * 
+ * @param courseId the id of the course to modify
+ * @param listIds the ids of the lists to be added
+ */
+export async function linkStudentListsAction(courseId: number, listIds: number[]) {
+  try {
+    let lists = await linkStudentLists(courseId, listIds);
+    revalidatePath("/");
+
+    return {
+      error: false,
+      data: lists
+    }
+  } catch (err) {
+    let message = "Error while linking lists to course";
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
+      message = "Unknown course or list id";
+    }
+    console.error(err); // FIXME: error logging
+
+    return {
+      error: message,
+      data: []
+    }
+  }
+}
+
+
+/**
+ * Unink student list from course action.
+ * 
+ * @param courseId the id of the course to modify
+ * @param listIds the ids of the lists to be removed
+ */
+export async function unlinkStudentListsAction(courseId: number, listIds: number[]) {
+  try {
+    let lists = await unlinkStudentLists(courseId, listIds);
+    revalidatePath("/");
+
+    return {
+      error: false,
+      data: lists
+    }
+  } catch (err) {
+    let message = "Error while linking lists to course";
+    if (err instanceof PrismaClientKnownRequestError && err.code === "P2025") {
+      message = "Unknown course or list id";
+    }
+    console.error(err); // FIXME: error logging
+
+    return {
+      error: message,
+      data: []
+    }
+  }
 }

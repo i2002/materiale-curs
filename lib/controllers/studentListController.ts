@@ -110,7 +110,8 @@ export const getStudentLists = cache(async () => {
         select: {
           students: true
         }
-      }
+      },
+      students: true
     }
   });
 });
@@ -137,4 +138,8 @@ export const getStudentList = cache(async (listId: number) => {
   return list;
 });
 
-export type StudentListWithStudents = Prisma.PromiseReturnType<typeof getStudentList>
+const studentListWithUsers = Prisma.validator<Prisma.StudentListDefaultArgs>()({
+  include: { students: true },
+});
+
+export type StudentListWithStudents = Prisma.StudentListGetPayload<typeof studentListWithUsers>;

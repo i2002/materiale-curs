@@ -49,6 +49,52 @@ export async function updateCourse(id: number, data: Prisma.CourseUpdateInput) {
 
 
 /**
+ * Link student lists to course.
+ *
+ * @param courseId the id of the course to be modified
+ * @param listIds the ids of the lists to be linked to the course
+ * @returns the updated array of lists linked to the course
+ */
+export async function linkStudentLists(courseId: number, listIds: number[]) {
+  let lists = await prisma.course.update({
+    where: { id: courseId },
+    data: {
+      enrolments: { connect: listIds.map(id => ({ id: id })) }
+    }
+  }).enrolments({
+    include: {
+      students: true
+    }
+  });
+
+  return lists;
+}
+
+
+/**
+ * Link student lists to course.
+ *
+ * @param courseId the id of the course to be modified
+ * @param listIds the ids of the lists to be linked to the course
+ * @returns the updated array of lists linked to the course
+ */
+export async function unlinkStudentLists(courseId: number, listIds: number[]) {
+  let lists = await prisma.course.update({
+    where: { id: courseId },
+    data: {
+      enrolments: { disconnect: listIds.map(id => ({ id: id })) }
+    }
+  }).enrolments({
+    include: {
+      students: true
+    }
+  });
+
+  return lists;
+}
+
+
+/**
  * Delete course.
  *
  * @param id the id of the course to be deleted
@@ -115,6 +161,23 @@ export const getCourseById = cache(async (id: number) => {
   });
 
   return course && await hasCoursePermission(course) ? course : null;
+});
+
+
+/**
+ * Get all student lists linked to a course.
+ * 
+ * @param courseId the id of the specified course
+ * @returns the lists linked to a course
+ */
+export const getCourseLinkedLists = cache(async (courseId: number) => {
+  return await prisma.course.findUnique({
+    where: { id: courseId }
+  }).enrolments({
+    include: {
+      students: true
+    }
+  });
 });
 
 
