@@ -1,6 +1,51 @@
 import { Prisma, Resource } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { cache } from "react";
+import { adminPermissionOrThrow } from "@/lib/controllers/usersController";
+
+
+/**
+ * Create a new resource.
+ *
+ * @param name the name of the resource
+ * @param type the type of the resource (can be folder or file)
+ * @param parentId the id of the parent resource
+ * @param courseId the id of the parent course
+ * @returns the newly created resource
+ */
+export async function createResource(name: string, type: string, parentId: string, courseId: number) {
+  await adminPermissionOrThrow();
+
+  // FIXME: upload pysical files
+
+  let res = await prisma.resource.create({
+    data: {
+      name: name,
+      type: type,
+      parentId: parentId,
+      courseId: courseId
+    }
+  });
+
+  return res;
+}
+
+
+/**
+ * Recursively delete the specified resources and their children.
+ * 
+ * @param resIds the ids of the resources to be deleted
+ */
+export async function deleteResources(resIds: string[]) {
+  await adminPermissionOrThrow();
+
+  await prisma.resource.deleteMany({
+    where: { id: { in: resIds } }
+  });
+
+  // FIXME: recursive delete
+  // FIXME: delete physical files
+}
 
 
 /**
@@ -10,8 +55,8 @@ import { cache } from "react";
  * @returns 
  */
 type IGetResourceOverload = {
-  (course: number, resource: string | undefined): any;
-  (course: string, resource: string[]): any;
+  (course: number, resource: string | undefined): Promise<Resource | null>;
+  (course: string, resource: string[]): Promise<Resource | null>;
 }
 
 export const getResource: IGetResourceOverload = cache(async (course: unknown, resource: unknown) => {
