@@ -1,4 +1,4 @@
-import { getResourceChildren } from "@/lib/controllers/resourceController";
+import { getResource, getResourceChildren } from "@/lib/controllers/resourceController";
 import { notFound } from "next/navigation";
 import ResourceListItem from "@/components/courses/ResourceListItem";
 
@@ -8,7 +8,7 @@ type Props = {
 }
 
 export default async function Page({ params, searchParams } : Props) {
-  let children = await getResourceChildren(params.slug, params.path);
+  let children = await getResourceChildren(await getResource(params.slug, params.path));
   if (!children) {
     notFound();
   }

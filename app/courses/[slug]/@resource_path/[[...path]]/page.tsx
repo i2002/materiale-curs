@@ -1,4 +1,4 @@
-import { getResourcePath } from "@/lib/controllers/resourceController";
+import { getResource, getResourcePath } from "@/lib/controllers/resourceController";
 import { ChevronRightIcon, HomeIcon } from "@heroicons/react/24/outline";
 import { Fragment } from "react"
 import { Text } from "@tremor/react";
@@ -12,7 +12,7 @@ interface Props {
 const getSegmentHref = (id: string, slug: string) => `/courses/${slug}/resource/${id}`;
 
 export default async function ResourcePathView({ params }: Props) {
-  let path = await getResourcePath(params.slug, params.path);
+  let path = await getResourcePath(await getResource(params.slug, params.path));
   if (path == null) {
     notFound();
   }
