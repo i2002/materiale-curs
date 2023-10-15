@@ -49,7 +49,7 @@ export default function SelectStudentListDialog({ lists, onSelectLists, open, se
                     name={`list-checkbox-${list.id}`}
                     checked={selected.includes(list.id)}
                     onChange={(e) => selectListHandler(e, list.id)}
-                    className="h-4 w-4 rounded border-slate-300 text-teal-600 shadow-sm focus:border-teal-300 focus:ring focus:ring-teal-200 focus:ring-opacity-50 focus:ring-offset-0 disabled:cursor-not-allowed disabled:text-slate-400" />
+                    className="form-checkbox" />
                   <label htmlFor={`list-checkbox-${list.id}`} className="flex w-full space-x-2 text-sm"> {list.name} </label>
                 </div>
               ))}
