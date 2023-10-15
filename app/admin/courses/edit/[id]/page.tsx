@@ -17,7 +17,7 @@ export default async function Page({ params }: Props) {
 
   return (
     <div className="p-6">
-      <Title className="mb-3">Editare curs "{course.name}"</Title>
+      <Title className="mb-3">Editare curs &quot;{course.name}&quot;</Title>
       <CourseForm course={course}></CourseForm>
     </div>
   );

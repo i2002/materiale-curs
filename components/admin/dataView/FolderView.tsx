@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getResourceAction, createResourceAction, deleteResourcesAction } from "@/lib/actions/resourceActions";
 import { AugumentedResource, ResourcePath } from "@/lib/controllers/resourceController";
 import { Resource } from "@prisma/client";
@@ -44,8 +44,8 @@ export default function FolderView({ courseId }: Props) {
   }, [resource]);
 
   useEffect(() => {
-    updateSelectionHandler(undefined, false);
-  }, [state])
+    setSelected([]);
+  }, [state]);
 
 
   // State change handlers
@@ -73,7 +73,7 @@ export default function FolderView({ courseId }: Props) {
         setSelected(prev => prev.filter(res => res !== id));
       }
     }
-  }
+  };
 
   const alerError = (message: string) => {
     setError(message);
@@ -120,7 +120,7 @@ export default function FolderView({ courseId }: Props) {
         deleteSelectionAction={() => setShowConfirmDelete(true)}
       />
       <FolderViewChildren
-        children={state.children}
+        resources={state.children}
         isLoading={isLoading}
         selected={selected}
         openResourceHandler={openResourceHandler}

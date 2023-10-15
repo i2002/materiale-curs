@@ -19,7 +19,7 @@ export default function StudentListDeleteForm({ course }: Props) {
   return (
     <>
       <Title className="text-center">Confirmare ștergere</Title>
-      <Text className="mt-1">Sigur doriți ștergerea cursului "{course.name}"?</Text>
+      <Text className="mt-1">Sigur doriți ștergerea cursului &quot;{course.name}&quot;?</Text>
       <Text>Toate resursele asociate vor fi șterse.</Text>
       <div className="flex justify-between mt-4">
         <Button size="xs" color="teal" onClick={() => router.back()}>Anulare</Button>

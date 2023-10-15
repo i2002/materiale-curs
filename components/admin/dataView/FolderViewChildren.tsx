@@ -14,7 +14,7 @@ const DataLoading = ({ rows }: { rows: number }) => [...Array(rows)].map((el, i)
 
 
 interface Props {
-  children: Array<AugumentedResource>;
+  resources: Array<AugumentedResource>;
   isLoading: boolean;
   selected: Array<string>;
   openResourceHandler: (res: Resource) => void;
@@ -23,7 +23,7 @@ interface Props {
 
 export default function FolderViewChildren(props: Props) {
   const {
-    children,
+    resources,
     isLoading,
     selected,
     openResourceHandler,
@@ -46,9 +46,9 @@ export default function FolderViewChildren(props: Props) {
   // update all checkbox indeterminate state
   useEffect(() => {
     if (checkboxRef.current) {
-      checkboxRef.current.indeterminate = selected.length > 0 && selected.length < children.length;
+      checkboxRef.current.indeterminate = selected.length > 0 && selected.length < resources.length;
     }
-  }, [selected, children, checkboxRef]);
+  }, [selected, resources, checkboxRef]);
 
 
   return (
@@ -57,7 +57,7 @@ export default function FolderViewChildren(props: Props) {
         <input
           type="checkbox"
           ref={checkboxRef}
-          checked={selected.length === children.length && selected.length !== 0}
+          checked={selected.length === resources.length && selected.length !== 0}
           onChange={selectionCheckboxHandler}
           className="form-checkbox"
         />
@@ -65,7 +65,7 @@ export default function FolderViewChildren(props: Props) {
         <span>Dimensiune</span>
         <span>Modificare</span>
       </div>
-      {children.map(child => (
+      {resources.map(child => (
         <div
           key={child.id}
           onClick={() => openResourceHandler(child)}
@@ -88,7 +88,7 @@ export default function FolderViewChildren(props: Props) {
           <span className="truncate">10 noi 2024</span> {/* FIXME: last updated data */}
         </div>
       ))}
-      {children.length === 0 && (isLoading && (
+      {resources.length === 0 && (isLoading && (
         <DataLoading rows={3}></DataLoading>
       ) || (
         <div className="text-center py-4 text-slate-400">

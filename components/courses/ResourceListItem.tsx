@@ -1,4 +1,4 @@
-import { AugumentedResource } from "@/lib/controllers/courseController";
+import { AugumentedResource } from "@/lib/controllers/resourceController";
 import { DocumentIcon, FolderIcon } from "@heroicons/react/24/outline";
 import { Resource } from "@prisma/client";
 import { TableCell, TableRow } from "@tremor/react";
