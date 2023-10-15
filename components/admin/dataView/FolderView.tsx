@@ -37,7 +37,7 @@ export default function FolderView({ courseId }: Props) {
   // Keep data in sync
   useEffect(() => {
     setIsLoading(true);
-    getResourceAction(1, resource).then(res => {
+    getResourceAction(courseId, resource).then(res => {
       setState(res);
       setIsLoading(false);
     });
