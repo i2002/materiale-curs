@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useEffect, useState } from "react";
-import { getResourceAction, createResourceAction, deleteResourcesAction } from "@/lib/actions/resourceActions";
+import { getResourceAction, deleteResourcesAction, createFolderResourceAction } from "@/lib/actions/resourceActions";
 import { AugumentedResource, ResourcePath } from "@/lib/controllers/resourceController";
 import { Resource } from "@prisma/client";
 import FolderViewToolbar from "./FolderViewToolbar";
@@ -75,7 +75,7 @@ export default function FolderView({ courseId }: Props) {
     }
   };
 
-  const alerError = (message: string) => {
+  const alertError = (message: string) => {
     setError(message);
     console.error(message);
   }
@@ -84,11 +84,36 @@ export default function FolderView({ courseId }: Props) {
   // Action handlers
   const addFolder = async (name: string) => {
     setIsLoading(true);
-    let resp = await createResourceAction(name, "folder", resource, courseId);
+    let resp = await createFolderResourceAction(name, resource, courseId);
     if (resp.error === undefined) {
       setState(resp.data);
     } else {
-      alerError(resp.error);
+      alertError(resp.error);
+    }
+    setIsLoading(false);
+  }
+
+  const uploadFile = async (files: FileList) => {
+    let formData = new FormData();
+    formData.append("file", files[0]);
+    formData.append("courseId", String(courseId));
+    formData.append("parentId", resource ?? "");
+
+    if (state.children.find(res => res.name === files[0].name)) {
+      alertError("Numele fișierului selectat nu este unic.");
+      return;
+    }
+
+    setIsLoading(true);
+    let resp = await fetch("/api/upload", {
+      method: "POST",
+      body: formData
+    });
+    let data = await resp.json();
+    if (data.error === undefined) {
+      setState(data.data);
+    } else {
+      alertError(data.error);
     }
     setIsLoading(false);
   }
@@ -99,7 +124,7 @@ export default function FolderView({ courseId }: Props) {
     if (resp.error === undefined) {
       setState(resp.data);
     } else {
-      alerError(resp.error);
+      alertError(resp.error);
     }
     setIsLoading(false);
   }
@@ -117,6 +142,7 @@ export default function FolderView({ courseId }: Props) {
         path={state.path}
         setResource={setResource}
         addFolderAction={() => setShowAddDialog(true)}
+        uploadFileAction={files => uploadFile(files)}
         deleteSelectionAction={() => setShowConfirmDelete(true)}
       />
       <FolderViewChildren

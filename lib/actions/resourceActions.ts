@@ -1,6 +1,6 @@
 "use server"
 
-import { createResource, deleteResources, getResource, getResourceChildren, getResourcePath } from "@/lib/controllers/resourceController"
+import { createFolderResource, deleteResource, getResource, getResourceChildren, getResourcePath } from "@/lib/controllers/resourceController"
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { revalidatePath } from "next/cache";
 
@@ -24,23 +24,23 @@ export async function getResourceAction(courseId: number, resourceId: string | u
 
 
 /**
- * Create resource action.
+ * Create folder resource action.
  * 
  * @param name the name of the resource
- * @param type the type of the resource
  * @param parentId the parent id of the resource (undefined for the root resource of course)
  * @param courseId the course id of the parent course
  * @returns the new list of children of the parent resource or error message
  */
-export async function createResourceAction(name: string, type: string, parentId: string | undefined, courseId: number) {
+export async function createFolderResourceAction(name: string, parentId: string | undefined, courseId: number) {
   if (parentId === undefined) {
     let res = await getResource(courseId, undefined);
     parentId = res?.id ?? "";
   }
 
   try {
-    await createResource(name, type, parentId, courseId);
-    revalidatePath("/");
+    await createFolderResource(name, parentId, courseId);
+    revalidatePath(`/admin/courses/view/${courseId}/files`);
+    revalidatePath(`/courses`);
   } catch (err) {
     console.log(err);
     let message = "Eroare la adăugare director."

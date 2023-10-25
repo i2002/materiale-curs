@@ -2,26 +2,25 @@ import { Prisma, Resource } from "@prisma/client";
 import prisma from "@/lib/prisma";
 import { cache } from "react";
 import { adminPermissionOrThrow } from "@/lib/controllers/usersController";
+import { createFile, deleteFile } from "./fsController";
+import { revalidatePath } from "next/cache";
 
 
 /**
- * Create a new resource.
+ * Create a new folder resource.
  *
  * @param name the name of the resource
- * @param type the type of the resource (can be folder or file)
  * @param parentId the id of the parent resource
  * @param courseId the id of the parent course
  * @returns the newly created resource
  */
-export async function createResource(name: string, type: string, parentId: string, courseId: number) {
+export async function createFolderResource(name: string, parentId: string, courseId: number) {
   await adminPermissionOrThrow();
-
-  // FIXME: upload pysical files
 
   let res = await prisma.resource.create({
     data: {
       name: name,
-      type: type,
+      type: "folder",
       parentId: parentId,
       courseId: courseId
     }
@@ -32,9 +31,44 @@ export async function createResource(name: string, type: string, parentId: strin
 
 
 /**
- * Recursively delete the specified resources and their children.
+ * Create and upload a new file resource.
  * 
- * @param resIds the ids of the resources to be deleted
+ * @param parentId the id of the parent resource
+ * @param couresId the id of the parent course
+ * @param file the uploaded file
+ */
+export async function createFileResource(parentId: string | undefined, couresId: number, file: File) {
+  await adminPermissionOrThrow();
+
+  const parent = await getResource(couresId, parentId);
+  if (!parent) {
+    return null;
+  }
+
+  let res = await prisma.resource.create({
+    data: {
+      name: file.name,
+      type: "file",
+      parentId: parent.id,
+      courseId: couresId,
+      fileData: { create: {
+        mimeType: file.type,
+        size: file.size,
+        path: `${couresId}/${parent.id}/${file.name}`
+      } }
+    },
+    include: {
+      course: true
+    }
+  });
+
+  await createFile(res.id, couresId, Buffer.from(await file.arrayBuffer()));
+
+  revalidatePath(`/admin/courses/view/${couresId}/files`);
+  revalidatePath(`/courses/${res.course.slug}`);
+  return res;
+}
+
  */
 export async function deleteResources(resIds: string[]) {
   await adminPermissionOrThrow();
