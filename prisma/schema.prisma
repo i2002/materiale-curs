@@ -91,7 +91,7 @@ model FileData {
   size       Int
   path       String @unique
 
-  resource Resource @relation(fields: [resourceId], references: [id])
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
 }
 
 model Course {
