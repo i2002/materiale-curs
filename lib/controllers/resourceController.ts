@@ -69,16 +69,44 @@ export async function createFileResource(parentId: string | undefined, couresId:
   return res;
 }
 
+
+/**
+ * Recursively delete the resource and its children.
+ *
+ * @param resId the id of the resource to be deleted
  */
-export async function deleteResources(resIds: string[]) {
+export async function deleteResource(resId: string) {
   await adminPermissionOrThrow();
 
-  await prisma.resource.deleteMany({
-    where: { id: { in: resIds } }
+  // get resource
+  let res = await prisma.resource.findUnique({
+    where: { id: resId },
+    include: {
+      children: true
+    }
   });
 
-  // FIXME: recursive delete
-  // FIXME: delete physical files
+  if (res == null) {
+    return null;
+  }
+
+  // delete children
+  for (const child of res.children) {
+    await deleteResource(child.id);
+  }
+
+  // delete physical file
+  if (res.type == "file") {
+    await deleteFile(res.id, res.courseId);
+  }
+
+  // delete resource
+  await prisma.resource.delete({
+    where: { id: res.id },
+    include: {
+      fileData: true
+    }
+  });
 }
 
 

@@ -12,3 +12,10 @@ export async function createFile(name: string, courseId: number, file: Buffer) {
   }
 }
 
+export async function deleteFile(name: string, courseId: number) {
+  try {
+    await rm(path.join(baseDir, String(courseId), name));
+  } catch(err) {
+    console.log("fsController", err); // FIXME: Error logging
+  }
+}

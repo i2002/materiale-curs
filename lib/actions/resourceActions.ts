@@ -69,9 +69,12 @@ export async function createFolderResourceAction(name: string, parentId: string 
  */
 export async function deleteResourcesAction(resIds: string[], courseId: number, parentId: string | undefined) {
   try {
-    await deleteResources(resIds);
-    revalidatePath("/");
+    await Promise.all(resIds.map(id => deleteResource(id)));
+    // await deleteResources(resIds);
+    revalidatePath("/courses");
+    revalidatePath("/admin/courses");
   } catch (err) {
+    console.log(err); // FIXME: error logging
     return {
       error: "Eroare la ștergere selecție."
     }
