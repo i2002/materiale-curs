@@ -1,5 +1,6 @@
+import ResourceIcon from "@/components/ui/ResourceIcon";
 import { AugumentedResource } from "@/lib/controllers/resourceController";
-import { DocumentIcon, FolderIcon } from "@heroicons/react/20/solid";
+import getResSize from "@/lib/utils";
 import { Resource } from "@prisma/client";
 import { ChangeEvent, Fragment, useEffect, useRef } from "react";
 
@@ -78,13 +79,9 @@ export default function FolderViewChildren(props: Props) {
             onClick={e => e.stopPropagation()}
             onChange={(e) => checkboxHandler(e, child.id)}
           />
-          {child.type == "folder" && (
-            <FolderIcon className="w-4 h-4"></FolderIcon>
-          ) || (
-            <DocumentIcon className="w-4 h-4"></DocumentIcon>
-          )}
+          <ResourceIcon type={child.type} className="w-4 h-4"></ResourceIcon>
           <span className="truncate" title={child.name}>{child.name}</span>
-          <span className="truncate">{child.type == "folder" ? child._count.children : child.fileData?.size}</span> {/* FIXME: resource size */}
+          <span className="truncate">{getResSize(child)}</span>
           <span className="truncate">10 noi 2024</span> {/* FIXME: last updated data */}
         </div>
       ))}
