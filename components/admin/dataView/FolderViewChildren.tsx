@@ -84,7 +84,7 @@ export default function FolderViewChildren(props: Props) {
             <DocumentIcon className="w-4 h-4"></DocumentIcon>
           )}
           <span className="truncate" title={child.name}>{child.name}</span>
-          <span className="truncate">{child._count.children}</span> {/* FIXME: resource size */}
+          <span className="truncate">{child.type == "folder" ? child._count.children : child.fileData?.size}</span> {/* FIXME: resource size */}
           <span className="truncate">10 noi 2024</span> {/* FIXME: last updated data */}
         </div>
       ))}
