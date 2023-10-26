@@ -1,15 +1,16 @@
-import { getResource } from "@/lib/controllers/resourceController";
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { getResource, getResourceChildren } from "@/lib/controllers/resourceController";
+import ResourceListItem from "@/components/courses/ResourceListItem";
+import { SearchParams } from "@/types";
 
 interface Props {
   params: { slug: string, path: string[] };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: SearchParams;
 }
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let res = await getResource(params.path, params.slug);
 
   if (!res || res.parentId == null) {
@@ -21,6 +22,15 @@ export async function generateMetadata(
   };
 }
 
-export default function Page() {
-  return null;
+
+export default async function Page({ params } : Props) {
+  let children = await getResourceChildren(await getResource(params.path, params.slug));
+
+  if (!children) {
+    notFound();
+  }
+
+  return children.map(item => (
+    <ResourceListItem resource={item} slug={params.slug} key={item.id}></ResourceListItem>  
+  ));
 }

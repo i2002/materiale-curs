@@ -13,13 +13,14 @@ const getSegmentHref = (id: string, slug: string) => `/courses/${slug}/resource/
 
 export default async function ResourcePathView({ params }: Props) {
   let path = await getResourcePath(await getResource(params.path, params.slug));
+
   if (path == null) {
     notFound();
   }
 
   return (
     <>
-      <Link href={`/courses/${params.slug}`} key="home">
+      <Link href={`/courses/${params.slug}/folder`} key="home">
         <HomeIcon className="w-5 h-5 text-gray-600 hover:text-black"></HomeIcon>
       </Link>
       {path.map((item, index, array) => (

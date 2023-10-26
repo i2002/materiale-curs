@@ -1,4 +1,4 @@
-// Extend types
+// Extend NextAuth types
 export enum Role {
   student = "student",
   admin = "admin",
@@ -16,6 +16,12 @@ declare module "next-auth" {
     user?: User;
   }
 }
+
 declare module "next-auth/jwt" {
   interface JWT extends IUser {}
+}
+
+// URL params types
+interface SearchParams {
+  [key: string]: string | string[] | undefined
 }

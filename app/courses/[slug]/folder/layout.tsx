@@ -4,16 +4,14 @@ import { Card } from "@tremor/react";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import ResourceList from "@/components/courses/ResourceList";
+import { SearchParams } from "@/types";
 
-type Props = {
+interface Props {
   params: { slug: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  searchParams: SearchParams
 }
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   let course = await getCourse(params.slug);
 
   return {
@@ -26,19 +24,16 @@ export async function generateMetadata(
 
 export default async function CourseLayout({
   children,
-  resource_path,
-  resource_children,
+  resource_nav,
   preview,
   params
 }: {
   children: React.ReactNode;
   preview: React.ReactNode;
-  resource_path: React.ReactNode;
-  resource_children: React.ReactNode;
+  resource_nav: React.ReactNode;
   params: { slug: string };
 }) {
   let course = await getCourse(params.slug);
-
   if (!course) {
     notFound();
   }
@@ -51,16 +46,15 @@ export default async function CourseLayout({
       />
       <div className="p-6">
         <Card className="">
-          <div className="flex p-3 mb-2 border bg-slate-100 items-center rounded-md">
-            {resource_path}
+          <div className="flex p-3 mb-2 box-content h-5 overflow-hidden border bg-slate-100 items-center rounded-md">
+            {resource_nav}
           </div>
           <ResourceList>
-            {resource_children}
+            {children}
           </ResourceList>
         </Card>
       </div>
       <div>{preview}</div>
-      <div>{children}</div>
     </div>
   )
 }
