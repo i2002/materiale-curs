@@ -7,8 +7,8 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function Page({ params, searchParams } : Props) {
-  let children = await getResourceChildren(await getResource(params.slug, params.path));
+export default async function Page({ params } : Props) {
+  let children = await getResourceChildren(await getResource(params.path, params.slug));
   if (!children) {
     notFound();
   }

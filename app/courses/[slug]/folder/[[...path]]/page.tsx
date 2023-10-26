@@ -10,7 +10,7 @@ export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  let res = await getResource(params.slug, params.path);
+  let res = await getResource(params.path, params.slug);
 
   if (!res || res.parentId == null) {
     return {};

@@ -12,7 +12,7 @@ interface Props {
 const getSegmentHref = (id: string, slug: string) => `/courses/${slug}/resource/${id}`;
 
 export default async function ResourcePathView({ params }: Props) {
-  let path = await getResourcePath(await getResource(params.slug, params.path));
+  let path = await getResourcePath(await getResource(params.path, params.slug));
   if (path == null) {
     notFound();
   }
