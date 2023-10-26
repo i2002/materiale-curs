@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache";
  * @returns the children and the path of the specified resource
  */
 export async function getResourceAction(courseId: number, resourceId: string | undefined) {
-  let res = await getResource(courseId, resourceId);
+  let res = await getResource(resourceId, courseId);
   const [children, path] = await Promise.all([getResourceChildren(res), getResourcePath(res)]);
 
   return {
@@ -32,11 +32,6 @@ export async function getResourceAction(courseId: number, resourceId: string | u
  * @returns the new list of children of the parent resource or error message
  */
 export async function createFolderResourceAction(name: string, parentId: string | undefined, courseId: number) {
-  if (parentId === undefined) {
-    let res = await getResource(courseId, undefined);
-    parentId = res?.id ?? "";
-  }
-
   try {
     await createFolderResource(name, parentId, courseId);
     revalidatePath(`/admin/courses/view/${courseId}/files`);

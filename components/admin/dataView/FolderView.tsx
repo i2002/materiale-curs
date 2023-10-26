@@ -2,8 +2,9 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { getResourceAction, deleteResourcesAction, createFolderResourceAction } from "@/lib/actions/resourceActions";
-import { AugumentedResource, ResourcePath } from "@/lib/controllers/resourceController";
+import { ResourcePath } from "@/lib/controllers/resourceController";
 import { Resource } from "@prisma/client";
+import { AugumentedResource } from "@/lib/prisma";
 import FolderViewToolbar from "./FolderViewToolbar";
 import FolderViewChildren from "./FolderViewChildren";
 import AddFolderDialog from "@/components/admin/dialogs/AddFolderDialog";

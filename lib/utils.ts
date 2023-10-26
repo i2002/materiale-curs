@@ -1,4 +1,4 @@
-import { AugumentedResource } from "./controllers/resourceController";
+import { AugumentedResource } from "@/lib/prisma";
 
 const formatSize = (bytes: number) => {
   if (bytes == 0) {

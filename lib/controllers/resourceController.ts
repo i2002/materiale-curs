@@ -1,5 +1,5 @@
 import { Prisma, Resource } from "@prisma/client";
-import prisma from "@/lib/prisma";
+import prisma, { augumentedResourceArgs } from "@/lib/prisma";
 import { cache } from "react";
 import { adminPermissionOrThrow } from "@/lib/controllers/usersController";
 import { createFile, deleteFile } from "./fsController";
@@ -14,14 +14,19 @@ import { revalidatePath } from "next/cache";
  * @param courseId the id of the parent course
  * @returns the newly created resource
  */
-export async function createFolderResource(name: string, parentId: string, courseId: number) {
+export async function createFolderResource(name: string, parentId: string | undefined, courseId: number) {
   await adminPermissionOrThrow();
+
+  let parent = await getResource(parentId, courseId);
+  if (parent == null) {
+    throw new Error("Parent resource not found");
+  }
 
   let res = await prisma.resource.create({
     data: {
       name: name,
       type: "folder",
-      parentId: parentId,
+      parentId: parent.id,
       courseId: courseId
     }
   });
@@ -40,7 +45,7 @@ export async function createFolderResource(name: string, parentId: string, cours
 export async function createFileResource(parentId: string | undefined, couresId: number, file: File) {
   await adminPermissionOrThrow();
 
-  const parent = await getResource(couresId, parentId);
+  const parent = await getResource(parentId, couresId);
   if (!parent) {
     return null;
   }
@@ -111,35 +116,32 @@ export async function deleteResource(resId: string) {
 
 
 /**
- * Query a resource by the inputed url.
- * @param courseSlug the slug of the course
- * @param path the URL path accessed
- * @returns 
+ * Query a resource by a combination of resource and course ids.
+ *
+ * @param resource the id of the resource (undefined to get the root resource of course, string or single item )
+ * @param course the parent course (can be either the slug or the id, or undefined if any)
+ * @returns the requested resource or null if not found
  */
-type IGetResourceOverload = {
-  (course: number, resource: string | undefined): Promise<Resource | null>;
-  (course: string, resource: string[]): Promise<Resource | null>;
-}
-
-export const getResource: IGetResourceOverload = cache(async (course: unknown, resource: unknown) => {
+export const getResource = cache(async (resource: string | string[] | undefined, course: string | number | undefined) => {
   let condition: Prisma.ResourceWhereInput = {};
 
-  switch(typeof course) {
-    case "string":
-      condition.course = { slug: course }
-      break;
-    case "number":
-      condition.course = { id: course }
-      break;
-  }
-
+  // resource condition
   if (resource == undefined) {
     condition.parentId = null;
-  } else if (Array.isArray(resource) && resource.length == 2 && resource[0] == "resource") {
-    condition.id = resource[1];
+  } else if (Array.isArray(resource) && resource.length == 1) {
+    condition.id = resource[0];
   } else if (typeof resource == "string") {
     condition.id = resource;
   } else {
+    return null;
+  }
+
+  // course condition
+  if (typeof course == "string") {
+    condition.course = { slug: course }
+  } else if (typeof course == "number") {
+    condition.course = { id: course }
+  } else if (course == undefined && resource == undefined) {
     return null;
   }
 
@@ -151,19 +153,6 @@ export const getResource: IGetResourceOverload = cache(async (course: unknown, r
   });
 });
 
-const augumentedResource = Prisma.validator<Prisma.ResourceDefaultArgs>()({
-  include: {
-    fileData: true,
-    _count: {
-      select: {
-        children: true
-      }
-    }
-  }
-});
-
-
-export type AugumentedResource = Prisma.ResourceGetPayload<typeof augumentedResource>;
 
 /**
  * Query the children of a resource.
@@ -178,7 +167,7 @@ export const getResourceChildren = cache(async (resource: Resource | null) => {
 
   return await prisma.resource.findMany({
     where: { parentId: resource.id },
-    ...augumentedResource,
+    ...augumentedResourceArgs,
     orderBy: [
       { type: "desc" },
       { name: "asc" }

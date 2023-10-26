@@ -1,5 +1,5 @@
 import ResourceIcon from "@/components/ui/ResourceIcon";
-import { AugumentedResource } from "@/lib/controllers/resourceController";
+import { AugumentedResource } from "@/lib/prisma";
 import getResSize from "@/lib/utils";
 import { Resource } from "@prisma/client";
 import { ChangeEvent, Fragment, useEffect, useRef } from "react";

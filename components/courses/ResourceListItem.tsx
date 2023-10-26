@@ -1,13 +1,13 @@
-import { AugumentedResource } from "@/lib/controllers/resourceController";
 import { Resource } from "@prisma/client";
 import { TableCell, TableRow } from "@tremor/react";
 import Link from "next/link";
-import ResourceIcon from "../ui/ResourceIcon";
+import ResourceIcon from "@/components/ui/ResourceIcon";
+import { AugumentedResource } from "@/lib/prisma";
 import getResSize from "@/lib/utils";
 
 
 const getHref = (res: Resource, slug: string) => {
-  let prefix = res.type == "folder" ? "resource" : "preview";
+  let prefix = res.type == "folder" ? "folder" : "file";
   return `/courses/${slug}/${prefix}/${res.id}`;
 }
 
