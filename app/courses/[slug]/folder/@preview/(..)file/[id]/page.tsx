@@ -10,6 +10,8 @@ interface Props {
 
 export default function Page({ params }: Props) {
   return (
-    <Modal title="File preview"><FilePreview resId={params.id}/></Modal>
+    <Modal title="File preview">
+      <FilePreview resId={params.id} />
+    </Modal>
   );
 }

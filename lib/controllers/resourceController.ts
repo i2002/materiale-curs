@@ -122,7 +122,7 @@ export async function deleteResource(resId: string) {
  * @param course the parent course (can be either the slug or the id, or undefined if any)
  * @returns the requested resource or null if not found
  */
-export const getResource = cache(async (resource: string | string[] | undefined, course: string | number | undefined) => {
+export const getResource = cache(async (resource: string | string[] | undefined, course?: string | number) => {
   let condition: Prisma.ResourceWhereInput = {};
 
   // resource condition
