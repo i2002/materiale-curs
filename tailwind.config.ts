@@ -1,13 +1,14 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss"
+import { PluginAPI } from "tailwindcss/types/config"
 
 const config: Config = {
   content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './node_modules/@tremor/**/*.{js,ts,jsx,tsx}', // Tremor module
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}", // Tremor module
   ],
-  darkMode: 'class',
+  darkMode: "class",
   theme: {
     transparent: "transparent",
     current: "currentColor",
@@ -126,6 +127,25 @@ const config: Config = {
         /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
     },
   ],
-  plugins: [require('@headlessui/tailwindcss'), require("@tailwindcss/typography"), require("@tailwindcss/forms")],
+  plugins: [
+    require("@headlessui/tailwindcss"),
+    require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
+    function ({ addUtilities }: PluginAPI) {
+      addUtilities({
+        ".arrow-hide": {
+          "-moz-appearance": "textfield !important",
+          "&::-webkit-inner-spin-button": {
+            "-webkit-appearance": "none",
+            "margin": "0"
+          },
+          "&::-webkit-outer-spin-button": {
+            "-webkit-appearance": "none",
+            "margin": "0"
+          },
+        }
+      })
+    }
+  ],
 }
 export default config

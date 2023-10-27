@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer components {
+  /* Form components */
   .form-label {
     @apply mb-1 block text-sm font-medium text-slate-700;
   }
@@ -24,6 +25,7 @@
   }
 }
 
+/* Table */
 .data-table table {
-  @apply table-fixed
+  @apply table-fixed;
 }
