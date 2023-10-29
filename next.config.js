@@ -4,7 +4,7 @@ const nextConfig = {
     serverActions: true,
   },
   webpack: (config) => {
-    config.resolve.alias.canvas = false;  
+    config.resolve.alias.canvas = false;
     return config;
   },
 }

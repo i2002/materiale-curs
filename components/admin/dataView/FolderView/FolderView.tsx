@@ -42,7 +42,7 @@ export default function FolderView({ courseId }: Props) {
       setState(res);
       setIsLoading(false);
     });
-  }, [resource]);
+  }, [resource, courseId]);
 
   useEffect(() => {
     setSelected([]);
