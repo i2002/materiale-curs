@@ -1,5 +1,4 @@
-import FilePreview from "@/components/courses/FilePreview";
-import Modal from "@/components/ui/Modal";
+import ResourceViewer from "@/components/courses/ResourceViewer";
 
 interface Props {
   params: {
@@ -10,8 +9,6 @@ interface Props {
 
 export default function Page({ params }: Props) {
   return (
-    <Modal title="File preview">
-      <FilePreview resId={params.id} />
-    </Modal>
+    <ResourceViewer resId={params.id} />
   );
 }

@@ -1,4 +1,5 @@
-import FilePreview from "@/components/courses/FilePreview";
+import ResourceViewer from "@/components/courses/ResourceViewer";
+
 
 export const metadata = {
   title: "File" // FIXME: window title
@@ -13,6 +14,6 @@ interface Props {
 
 export default function Page({ params }: Props) {
   return (
-    <FilePreview resId={params.id}/>
+    <ResourceViewer resId={params.id} />
   );
 }

@@ -2,7 +2,7 @@
 
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
-import { forwardRef } from "react";
+import { ForwardRefRenderFunction, forwardRef } from "react";
 
 interface Props {
   name: string;
@@ -10,7 +10,7 @@ interface Props {
   children: React.ReactNode;
 }
 
-export default forwardRef<HTMLDivElement, Props>(function ({ name, toolbar, children }, ref) {
+const ResourceViewerHeader: ForwardRefRenderFunction<HTMLDivElement, Props> = function ({ name, toolbar, children }, ref) {
   const router = useRouter();
 
   return (
@@ -31,4 +31,6 @@ export default forwardRef<HTMLDivElement, Props>(function ({ name, toolbar, chil
       </div>
     </div>
   );
-});
+}
+
+export default forwardRef<HTMLDivElement, Props>(ResourceViewerHeader);
