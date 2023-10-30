@@ -8,7 +8,7 @@ export default withAuth(
       req.nextUrl.pathname.startsWith("/admin") &&
       req.nextauth.token?.role !== "admin"
     ) {
-      return new NextResponse("You are not authorized!");
+      return NextResponse.redirect(new URL("/forbidden", req.url));
     }
   },
   {
