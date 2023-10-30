@@ -6,8 +6,8 @@ import { ForwardRefRenderFunction, forwardRef } from "react";
 
 interface Props {
   name: string;
-  toolbar: React.ReactNode;
-  children: React.ReactNode;
+  toolbar?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 const ResourceViewerHeader: ForwardRefRenderFunction<HTMLDivElement, Props> = function ({ name, toolbar, children }, ref) {
@@ -26,7 +26,7 @@ const ResourceViewerHeader: ForwardRefRenderFunction<HTMLDivElement, Props> = fu
           onClick={() => router.back()}
         />
       </header>
-      <div className="flex flex-col items-center px-2 h-full bg-zinc-500 overflow-auto" ref={ref}>
+      <div className="flex flex-col items-center h-full bg-zinc-500 relative overflow-auto" ref={ref}>
         {children}
       </div>
     </div>

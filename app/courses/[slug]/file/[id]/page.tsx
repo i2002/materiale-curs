@@ -1,9 +1,5 @@
 import ResourceViewer from "@/components/courses/ResourceViewer";
-
-
-export const metadata = {
-  title: "File" // FIXME: window title
-}
+import { metaFilename } from "@/components/courses/ResourceViewer/ResourceViewer";
 
 interface Props {
   params: {
@@ -11,6 +7,8 @@ interface Props {
     id: string;
   }
 }
+
+export const generateMetadata = ({ params }: Props) => metaFilename(params.id);
 
 export default function Page({ params }: Props) {
   return (
