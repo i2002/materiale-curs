@@ -16,7 +16,7 @@ export default async function Page({ params } : Props) {
   }
 
   return (
-    <Card className="mx-auto max-w-sm mt-6">
+    <Card className="mx-auto max-w-sm">
       <CourseDeleteForm course={course}></CourseDeleteForm>
     </Card>
   );

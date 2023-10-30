@@ -16,8 +16,8 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <div className="py-6 px-8">
-      <h2 className="text-2xl">{course.name}</h2>
+    <div className="mb-6 px-2">
+      <h2 className="text-2xl mt-2">{course.name}</h2>
       <p className="text-sm text-gray-600 mt-1">
         Anul {course.year}, Semestrul {course.semester}, Specializarea {course.specialization}
       </p>

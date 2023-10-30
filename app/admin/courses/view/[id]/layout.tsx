@@ -18,7 +18,7 @@ export default async function CourseViewLayout({
   return (
     <>
       {children}
-      <Card className="mx-6 mb-6 pt-2 pb-3 w-auto">
+      <Card className="pt-2 pb-3 w-auto">
         <div className="w-full">
           <TabList root={`/admin/courses/view/${params.id}`} tabs={courseTabs}></TabList>
           <div className="w-full mt-2">

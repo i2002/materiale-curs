@@ -16,9 +16,9 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <div className="p-6">
+    <>
       <Title className="mb-3">Editare listă {list.name}</Title>
       <StudentListForm list={list}></StudentListForm>
-    </div>
+    </>
   );
 }

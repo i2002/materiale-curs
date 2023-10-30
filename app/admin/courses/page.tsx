@@ -1,7 +1,7 @@
 import { Button } from "@tremor/react";
-import ListTable from "@/components/admin/dataView/ListTable";
 import Link from "next/link";
 import { TrashIcon } from "@heroicons/react/20/solid";
+import ListTable from "@/components/admin/dataView/ListTable";
 import { getCourses } from "@/lib/controllers/courseController";
 
 
@@ -33,13 +33,13 @@ const getItems = async () => {
 
 export default function CourseDashboard() {
   return (
-    <div className="px-6 py-4">
+    <>
       <div className="flex justify-end my-3">
         <Link href="/admin/courses/create">
           <Button color="teal">Curs nou</Button>
         </Link>
       </div>
       <ListTable columns={cols} getItems={getItems}></ListTable>
-    </div>
+    </>
   );
 }

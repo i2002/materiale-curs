@@ -11,7 +11,7 @@ export default async function AdminLayout({
       <Sidebar></Sidebar>
       <div className="flex flex-col items-stretch w-full max-h-screen overflow-auto">
         <AdminHeader></AdminHeader>
-        <div className="overflow-auto">
+        <div className="overflow-auto p-6 h-full flex flex-col justify-stretch items-stretch">
           {children}
         </div>
       </div>

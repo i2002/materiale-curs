@@ -1,8 +1,8 @@
-import { getStudentLists } from "@/lib/controllers/studentListController";
-// import { Button } from "@tremor/react";
-import Link from "next/link";
-import ListTable from "@/components/admin/dataView/ListTable";
+import { Button } from "@tremor/react";
 import { TrashIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
+import { getStudentLists } from "@/lib/controllers/studentListController";
+import ListTable from "@/components/admin/dataView/ListTable";
 
 const cols = [
   "Nume listă",
@@ -28,15 +28,14 @@ const getItems = async () => {
 
 export default function StudentsDashboard() {
   return (
-    <div className="px-6 py-4">
+    <>
       <div className="flex justify-end my-3">
-        <Link href="/admin/students/create" className="tremor-Button-root flex-shrink-0 inline-flex justify-center items-center group font-medium outline-none rounded-tremor-default shadow-tremor-input dark:shadow-dark-tremor-input border px-4 py-2 text-sm bg-teal-500 border-teal-500 text-white hover:bg-teal-600 hover:border-teal-700">
-          Listă studenți nouă
+        <Link href="/admin/students/create">
+          <Button color="teal">Listă studenți nouă</Button>
         </Link>
-        {/* <Button color="teal">Listă studenți nouă</Button> */}
       </div>
       <ListTable columns={cols} getItems={getItems}></ListTable>
-    </div>
+    </>
   );
 }
 
