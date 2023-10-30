@@ -1,7 +1,7 @@
 import { RefObject, useCallback, useEffect, useRef } from "react";
 import { PDFViewer, EventBus, PDFLinkService } from "pdfjs-dist/types/web/pdf_viewer.component.d.js";
 import { pdfjs, pdfjsViewer } from "@/lib/pdfjs";
-// import "pdfjs-dist/web/pdf_viewer.css";
+import { pdfjsAssetsPath } from "@/lib/pdfjsConfig";
 
 
 // PDF.js worker
@@ -9,13 +9,11 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.j
 
 
 // PDF.js options
-const CMAP_URL = "../../node_modules/pdfjs-dist/cmaps/";
+const CMAP_URL = `${pdfjsAssetsPath}/cmaps/`;
 const CMAP_PACKED = true;
 const ENABLE_XFA = true;
 
 const options = {
-  // cMapUrl: "/cmaps/",
-  standardFontDataUrl: "/standard_fonts/",
   cMapUrl: CMAP_URL,
   cMapPacked: CMAP_PACKED,
   enableXfa: ENABLE_XFA,

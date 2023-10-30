@@ -1,0 +1,1 @@
+export const pdfjsAssetsPath = "/_next/static/pdfjs/";
