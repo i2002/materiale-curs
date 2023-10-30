@@ -1,6 +1,6 @@
 import ResourceIcon from "@/components/ui/ResourceIcon";
 import { AugumentedResource } from "@/lib/prisma";
-import getResSize from "@/lib/utils";
+import { getResSize, getResDate } from "@/lib/utils";
 import { Resource } from "@prisma/client";
 import { ChangeEvent, Fragment, useEffect, useRef } from "react";
 
@@ -64,7 +64,7 @@ export default function FolderViewChildren(props: Props) {
         />
         <span className="col-span-2">Nume</span>
         <span>Dimensiune</span>
-        <span>Modificare</span>
+        <span>Modificat la</span>
       </div>
       {resources.map(child => (
         <div
@@ -80,9 +80,15 @@ export default function FolderViewChildren(props: Props) {
             onChange={(e) => checkboxHandler(e, child.id)}
           />
           <ResourceIcon type={child.type} className="w-4 h-4"></ResourceIcon>
-          <span className="truncate" title={child.name}>{child.name}</span>
-          <span className="truncate">{getResSize(child)}</span>
-          <span className="truncate">10 noi 2024</span> {/* FIXME: last updated data */}
+          <span className="truncate" title={child.name}>
+            {child.name}
+          </span>
+          <span className="truncate">
+            {getResSize(child)}
+          </span>
+          <span className="truncate" title={getResDate(child, "full")}>
+            {getResDate(child)}
+          </span>
         </div>
       ))}
       {resources.length === 0 && (isLoading && (

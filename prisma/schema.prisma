@@ -75,6 +75,8 @@ model Resource {
   type       String  @default("folder")
   parentId   String?
   courseId   Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   parent   Resource?  @relation("resourceTree", fields: [parentId], references: [id], onDelete: Cascade)
   children Resource[] @relation("resourceTree")

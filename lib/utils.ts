@@ -11,6 +11,15 @@ const formatSize = (bytes: number) => {
   return `${base} ${unit}`
 }
 
-export default function getResSize(res: AugumentedResource) {
+export function getResSize(res: AugumentedResource) {
   return res.type == "folder" ? res._count.children : formatSize(res.fileData?.size ?? 0);
+}
+
+export function getResDate(res: AugumentedResource, context: "full" | "display" = "display") {
+  return new Date(res.updatedAt)
+    .toLocaleString("ro-RO", context == "display" ? {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    } : undefined);
 }
