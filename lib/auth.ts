@@ -40,7 +40,7 @@ const providers = [
     tenantId: process.env.AZURE_AD_TENANT_ID as string,
     allowDangerousEmailAccountLinking: true,
   
-    profile(profile, tokens) {
+    profile(profile) {
       return {
         id: profile.sub,
         name: profile.name ?? profile.preferred_username,
@@ -104,6 +104,13 @@ export const authOptions: NextAuthOptions = {
   //   }
   // },
   // debug: true
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  theme: {
+    colorScheme: "light"
+  }
 }
 
 // Helper functions
