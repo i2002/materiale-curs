@@ -9,7 +9,9 @@ interface Props {
 export default function ImageViewer({ name, resUrl }: Props) {
   return (
     <ResourceViewerHeader name={name}>
-      <Image alt={name} src={resUrl}></Image>
+      <div className="relative h-screen w-full">
+        <Image alt={name} src={resUrl} className="object-contain" fill />
+      </div>
     </ResourceViewerHeader>
   );
 }

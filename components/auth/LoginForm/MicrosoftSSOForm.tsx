@@ -21,7 +21,9 @@ export default function MicrosoftSSOForm() {
       onClick={onLogin}
       role="button"
     >
-      <Image className="pr-3 h-full" src="/images/ms-signin.svg" alt="Microsoft logo"/>
+      <div className="relative h-full w-10 pr-3">
+        <Image fill src="/images/ms-signin.svg" alt="Microsoft logo"/>
+      </div>
       Conectare cu Microsoft
     </a>
   );
