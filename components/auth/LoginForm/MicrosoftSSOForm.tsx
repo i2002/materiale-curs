@@ -1,6 +1,7 @@
 import { signIn } from "next-auth/react";
 import { useContext } from "react";
 import { LoginContext } from "./LoginContext";
+import Image from "next/image";
 
 interface Props {
   callbackUrl: string;
@@ -20,7 +21,7 @@ export default function MicrosoftSSOForm() {
       onClick={onLogin}
       role="button"
     >
-      <img className="pr-3 h-full" src="/images/ms-signin.svg" alt="Microsoft logo"/>
+      <Image className="pr-3 h-full" src="/images/ms-signin.svg" alt="Microsoft logo"/>
       Conectare cu Microsoft
     </a>
   );

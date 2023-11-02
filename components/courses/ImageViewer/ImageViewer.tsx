@@ -1,3 +1,4 @@
+import Image from "next/image";
 import ResourceViewerHeader from "../ResourceViewer/ResourceViewerHeader";
 
 interface Props {
@@ -8,7 +9,7 @@ interface Props {
 export default function ImageViewer({ name, resUrl }: Props) {
   return (
     <ResourceViewerHeader name={name}>
-      <img src={resUrl}></img>
+      <Image alt={name} src={resUrl}></Image>
     </ResourceViewerHeader>
   );
 }

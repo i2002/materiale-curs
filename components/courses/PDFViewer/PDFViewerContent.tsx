@@ -29,9 +29,9 @@ export default function PDFViewerContent2({ resUrl }: Props) {
 
 
   // setup actions
-  useEffect(() => loadDocument(resUrl), []);
-  useEffect(() => setCurrentPage(currentPage), [currentPage]);
-  useEffect(() => setScale(scale), [scale]);
+  useEffect(() => loadDocument(resUrl), [loadDocument, resUrl]);
+  useEffect(() => setCurrentPage(currentPage), [currentPage, setCurrentPage]);
+  useEffect(() => setScale(scale), [scale, setScale]);
 
   console.log("render");
   return (

@@ -99,7 +99,7 @@ const usePdfJs = (containerRef: RefObject<HTMLDivElement>, initCallback: InitCal
       .on("pagesinit", initCallback)
       .on("pagechanging", pageChangeCallback);
     }
-  }, []);
+  }, [containerRef, initCallback, pageChangeCallback]);
 
 
   /**

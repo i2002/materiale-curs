@@ -1,9 +1,9 @@
 "use client";
 
 import { signOut } from "next-auth/react";
-import { forwardRef } from "react";
+import { ForwardedRef, forwardRef } from "react";
 
-const SignOutButton = forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<'button'>>((props, ref) => {
+const SignOutButton = (props: React.ComponentPropsWithoutRef<'button'>, ref: ForwardedRef<HTMLButtonElement>) => {
   return (
     <button
       ref={ref}
@@ -13,6 +13,6 @@ const SignOutButton = forwardRef<HTMLButtonElement, React.ComponentPropsWithoutR
       Dezautentificare 
     </button>
   )
-});
+}
 
-export default SignOutButton;
+export default forwardRef<HTMLButtonElement, React.ComponentPropsWithoutRef<'button'>>(SignOutButton);
