@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import links from "../../../app/admin/links";
 import SignOutButton from "@/components/ui/SignOutButton";
+import SwitchViewButton from "@/components/ui/SwitchViewButton";
 
 export default function Header() {
   let pathname = usePathname();
@@ -18,6 +19,7 @@ export default function Header() {
             </Link>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+            <SwitchViewButton></SwitchViewButton>
             <SignOutButton className="hover:bg-teal-200 rounded-md px-3 py-2 text-sm font-medium" />
           </div>
         </div>

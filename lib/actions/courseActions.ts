@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { CourseFormSchema, courseFormSchema } from "./form_schemas";
-import { createCourse, deleteCourse, linkStudentLists, unlinkStudentLists, updateCourse } from "../controllers/courseController";
+import { createCourse, deleteCourse, getCourse, getCourseById, linkStudentLists, unlinkStudentLists, updateCourse } from "../controllers/courseController";
 
 
 /**
@@ -168,4 +168,25 @@ export async function unlinkStudentListsAction(courseId: number, listIds: number
       data: []
     }
   }
+}
+
+
+/**
+ * Get course information action using course id.
+ *
+ * @param id the id of the course
+ * @returns 
+ */
+export async function getCourseByIdAction(id: number) {
+  return await getCourseById(id);
+}
+
+
+/**
+ * Get course information action using course slug.
+ * @param slug the slug of the course
+ * @returns 
+ */
+export async function getCourseBySlugAction(slug: string) {
+  return  await getCourse(slug);
 }
