@@ -24,7 +24,8 @@ export async function GET(req: NextRequest, { params }: Params) {
   // response
   return new Response(fileBuf, {
     headers: {
-      "Content-Type": res.fileData?.mimeType ?? "text/plain"
+      "Content-Type": res.fileData?.mimeType ?? "text/plain",
+      "Content-disposition": "attachment; filename=" + res.name
     }
-  })
+  });
 }
