@@ -14,11 +14,11 @@ export default function TextViewer({ name, resUrl }: Props) {
 
   useEffect(() => {
     fetch(resUrl)
-      .then(data => data.text())
-      .then(text => {
-        setText(text);
-        setLoading(false);
-      });
+    .then(data => data.ok ? data.text() : `Eroare la încărcare fișier (${data.status}: ${data.statusText})`)
+    .then(text => {
+      setText(text);
+      setLoading(false);
+    });
   });
 
   return (
