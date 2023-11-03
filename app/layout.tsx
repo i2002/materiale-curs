@@ -21,7 +21,7 @@ export default async function RootLayout({
       <head>
         <link rel="stylesheet" href={`${pdfjsAssetsPath}/pdf_viewer.css`} />
       </head>
-      <body className={`${inter.className} flex min-h-screen flex-col items-stretch`}>
+      <body className={`${inter.className} flex min-h-screen h-full flex-col items-stretch`}>
         <SessionProvider>
           {children}
         </SessionProvider>

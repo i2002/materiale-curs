@@ -8,7 +8,9 @@ export default async function StudentDashboardLayout({
   return (
     <>
       <Header title='Materiale curs'></Header>
-      {children}
+      <div className="overflow-auto">
+        {children}
+      </div>
     </>
   );
 }
