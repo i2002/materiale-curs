@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { CubeIcon } from "@heroicons/react/24/outline";
-import SignOutButton from "./SignOutButton";
+import AccountOptionsMenu from "./AccountOptionsMenu";
 import SwitchViewButton from "./SwitchViewButton";
 
 interface Props {
@@ -22,7 +22,7 @@ export default async function Header({ title }: Props) {
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <SwitchViewButton></SwitchViewButton>
-            <SignOutButton className="text-slate-300 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" />
+            <AccountOptionsMenu className="text-slate-300 hover:bg-slate-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium" />
           </div>
         </div>
       </div>

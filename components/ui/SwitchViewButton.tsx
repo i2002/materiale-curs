@@ -48,7 +48,7 @@ export default function SwitchViewButton() {
   }
 
   return data?.user?.role == "admin" ? (
-    <div className={`p-2 ${pathName.startsWith("/courses") ? "hover:bg-slate-700 text-white" : "hover:bg-teal-200"} rounded cursor-pointer`} onClick={clickHandler}>
+    <div className={`p-2 ${pathName.startsWith("/courses") ? "hover:bg-slate-700 hover:text-white text-slate-300" : "hover:bg-teal-200"} rounded-full cursor-pointer`} onClick={clickHandler}>
       {getIcon(pathName)}
     </div>
   ) : null;
