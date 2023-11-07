@@ -7,6 +7,7 @@ import ResourceViewerHeader from "./ResourceViewerHeader";
 import PDFViewer from "../PDFViewer";
 import ImageViewer from "../ImageViewer";
 import TextViewer from "../TextViewer";
+import { getCourseById } from "@/lib/controllers/courseController";
 
 interface Props {
   resId: string;
@@ -14,9 +15,10 @@ interface Props {
 
 export async function metaFilename(resId: string): Promise<Metadata> {
   let res = await getResource(resId);
+  let course = res ? await getCourseById(res.courseId) : null;
 
   return {
-    title: res?.name
+    title: `${res?.name} - ${course?.name}`
   };
 }
 

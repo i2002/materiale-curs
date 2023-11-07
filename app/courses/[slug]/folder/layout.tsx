@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: {
       template: `%s - ${course?.name}`,
-      default: course?.name ?? "Materiale curs"
+      default: `${course?.name} | Materiale curs` ?? "Materiale curs"
     }
   }
 }
