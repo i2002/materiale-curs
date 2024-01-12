@@ -1,11 +1,12 @@
-import ResourceIcon from "@/components/ui/ResourceIcon";
-import { AugumentedResource } from "@/lib/prisma";
-import { getResSize, getResDate } from "@/lib/utils";
-import { Resource } from "@prisma/client";
 import { ChangeEvent, Fragment, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Resource } from "@prisma/client";
+import { getResSize, getResDate } from "@/lib/utils";
+import ResourceIcon from "@/components/ui/ResourceIcon";
+import { useFileManagerContext } from "./FileManagerContext";
 
 
-const DataLoading = ({ rows }: { rows: number }) => [...Array(rows)].map((el, i) => (
+const DataLoading = ({ rows }: { rows: number }) => [...Array(rows)].map((_el, i) => (
   <Fragment key={i}>
     <div className="px-3 py-2 hover:bg-slate-50 rounded border-b-slate-200 border-b gap-2">
       <div className="animate-pulse h-2 my-2 rounded-full bg-slate-200"></div>
@@ -14,42 +15,44 @@ const DataLoading = ({ rows }: { rows: number }) => [...Array(rows)].map((el, i)
 ));
 
 
-interface Props {
-  resources: Array<AugumentedResource>;
-  isLoading: boolean;
-  selected: Array<string>;
-  openResourceHandler: (res: Resource) => void;
-  updateSelectionHandler: (id: string | undefined, action?: boolean) => void;
-}
-
-export default function FolderViewChildren(props: Props) {
-  const {
-    resources,
-    isLoading,
-    selected,
-    openResourceHandler,
-    updateSelectionHandler
-  } = props;
+export default function FileManagerChildren() {
+  const { state: { children }, loading, selected, setResource, setSelected } = useFileManagerContext();
+  const router = useRouter();
   const checkboxRef = useRef<HTMLInputElement>(null);
 
 
-  // handlers
+  // selection handlers
   const checkboxHandler = (e: ChangeEvent<HTMLInputElement>, id: string) => {
-    updateSelectionHandler(id, e.currentTarget.checked);
+    if (e.currentTarget.checked) {
+      setSelected(prev => [...prev, id]);
+    } else {
+      setSelected(prev => prev.filter(res => res !== id));
+    }
     e.stopPropagation();
   }
 
   const selectionCheckboxHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    updateSelectionHandler(undefined, e.target.checked);
+    if (e.target.checked) {
+      setSelected(children.map(child => child.id));
+    } else {
+      setSelected([]);
+    }
   }
 
+  const openResourceHandler = (res: Resource) => {
+    if (res.type == "folder") {
+      setResource(res.id);
+    } else if (res.type == "file") {
+      router.push(`files/preview/${res.id}`);
+    }
+  }
 
-  // update all checkbox indeterminate state
+  // select all checkbox indeterminate state
   useEffect(() => {
     if (checkboxRef.current) {
-      checkboxRef.current.indeterminate = selected.length > 0 && selected.length < resources.length;
+      checkboxRef.current.indeterminate = selected.length > 0 && selected.length < children.length;
     }
-  }, [selected, resources, checkboxRef]);
+  }, [selected, children, checkboxRef]);
 
 
   return (
@@ -58,7 +61,7 @@ export default function FolderViewChildren(props: Props) {
         <input
           type="checkbox"
           ref={checkboxRef}
-          checked={selected.length === resources.length && selected.length !== 0}
+          checked={selected.length === children.length && selected.length !== 0}
           onChange={selectionCheckboxHandler}
           className="form-checkbox"
         />
@@ -66,11 +69,11 @@ export default function FolderViewChildren(props: Props) {
         <span>Dimensiune</span>
         <span>Modificat la</span>
       </div>
-      {resources.map(child => (
+      {children.map(child => (
         <div
           key={child.id}
           onClick={() => openResourceHandler(child)}
-          className={`px-3 py-2 hover:bg-slate-50 rounded grid grid-cols-[auto_auto_1fr_100px_100px] items-center border-b-slate-200 border-b gap-2 cursor-pointer ${isLoading ? "pointer-events-none select-none opacity-50" : ""}`}
+          className={`px-3 py-2 hover:bg-slate-50 rounded grid grid-cols-[auto_auto_1fr_100px_100px] items-center border-b-slate-200 border-b gap-2 cursor-pointer ${loading ? "pointer-events-none select-none opacity-50" : ""}`}
         >
           <input
             type="checkbox"
@@ -79,7 +82,7 @@ export default function FolderViewChildren(props: Props) {
             onClick={e => e.stopPropagation()}
             onChange={(e) => checkboxHandler(e, child.id)}
           />
-          <ResourceIcon type={child.type} className="w-4 h-4"></ResourceIcon>
+          <ResourceIcon type={child.type} className="w-4 h-4" />
           <span className="truncate" title={child.name}>
             {child.name}
           </span>
@@ -91,8 +94,8 @@ export default function FolderViewChildren(props: Props) {
           </span>
         </div>
       ))}
-      {resources.length === 0 && (isLoading && (
-        <DataLoading rows={3}></DataLoading>
+      {children.length === 0 && (loading && (
+        <DataLoading rows={3} />
       ) || (
         <div className="text-center py-4 text-slate-400">
           Acest director nu conține niciun fișier.

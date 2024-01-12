@@ -1,3 +1,4 @@
+import { FileManagerProvider } from "@/components/admin/dataView/FileManager/FileManagerContext";
 import TabList from "@/components/admin/layout/TabList";
 import { Card } from "@tremor/react";
 
@@ -15,8 +16,10 @@ export default async function CourseViewLayout({
   tabs: React.ReactNode;
   params: { id: string };
 }) {
+  const courseId = parseInt(params.id);
+
   return (
-    <>
+    <FileManagerProvider courseId={courseId}>
       {children}
       <Card className="pt-2 pb-3 w-auto">
         <div className="w-full">
@@ -26,6 +29,6 @@ export default async function CourseViewLayout({
           </div>
         </div>
       </Card>
-    </>
+    </FileManagerProvider>
   );
 }

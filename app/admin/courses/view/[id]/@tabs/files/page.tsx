@@ -1,13 +1,7 @@
-import FolderView from "@/components/admin/dataView/FolderView";
+import FileManager from "@/components/admin/dataView/FileManager/FileManager";
 
-type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
-}
-
-export default function Page({ params }: Props) {
-  const courseId = parseInt(params.id);
+export default function Page() {
   return (
-    <FolderView courseId={courseId}></FolderView>
+    <FileManager></FileManager>
   );
 }
