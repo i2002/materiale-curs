@@ -13,7 +13,7 @@ interface Props {
 
 export default function TabList({ root, tabs }: Props) {
   let pathname = usePathname();
-  const getState = (tabHref: string) => pathname == `${root}/${tabHref}` ? "selected" : "";
+  const getState = (tabHref: string) => pathname.startsWith(`${root}/${tabHref}`) ? "selected" : "";
 
   return (
     <div className="flex justify-start overflow-x-clip space-x-4 border-b">
