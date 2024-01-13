@@ -4,7 +4,6 @@ export default async function FileManagerLayout({
 }: {
   children: React.ReactNode;
   preview: React.ReactNode;
-  resource_nav: React.ReactNode;
 }) {
   return (
     <div>

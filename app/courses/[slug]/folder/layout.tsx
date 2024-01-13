@@ -7,8 +7,10 @@ import ResourceList from "@/components/courses/ResourceList";
 import { SearchParams } from "@/types";
 
 interface Props {
-  params: { slug: string }
-  searchParams: SearchParams
+  children: React.ReactNode;
+  preview: React.ReactNode;
+  resource_nav: React.ReactNode;
+  params: { slug: string };
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -27,12 +29,7 @@ export default async function CourseLayout({
   resource_nav,
   preview,
   params
-}: {
-  children: React.ReactNode;
-  preview: React.ReactNode;
-  resource_nav: React.ReactNode;
-  params: { slug: string };
-}) {
+}: Props) {
   let course = await getCourse(params.slug);
   if (!course) {
     notFound();

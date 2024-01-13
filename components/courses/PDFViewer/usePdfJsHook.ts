@@ -1,11 +1,8 @@
 import { RefObject, useCallback, useEffect, useRef } from "react";
 import { PDFViewer, EventBus, PDFLinkService } from "pdfjs-dist/types/web/pdf_viewer.component.d.js";
-import { pdfjs, pdfjsViewer } from "@/lib/pdfjs";
+import * as pdfjs from '@/lib/pdfjs';
+import * as pdfjsViewer from 'pdfjs-dist/web/pdf_viewer.mjs';
 import { pdfjsAssetsPath } from "@/lib/pdfjsConfig";
-
-
-// PDF.js worker
-pdfjs.GlobalWorkerOptions.workerSrc = new URL("pdfjs-dist/build/pdf.worker.min.js", import.meta.url,).toString();
 
 
 // PDF.js options

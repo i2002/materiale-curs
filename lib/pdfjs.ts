@@ -1,8 +1,10 @@
-import * as pdfjsModule from 'pdfjs-dist';
-import * as pdfjsViewerModule from 'pdfjs-dist/web/pdf_viewer';
+import { GlobalWorkerOptions } from "pdfjs-dist";
 
-export type PdfjsLib = typeof pdfjsModule;
-export const pdfjs = ('default' in pdfjsModule ? pdfjsModule['default'] : pdfjsModule) as PdfjsLib;
+if (typeof window !== "undefined" && "Worker" in window) {
+  GlobalWorkerOptions.workerPort = new Worker(
+    new URL("pdfjs-dist/build/pdf.worker.mjs", import.meta.url),
+    { type: "module" }
+  );
+}
 
-export type PdfJsViewer = typeof pdfjsViewerModule;
-export const pdfjsViewer = ('default' in pdfjsViewerModule ? pdfjsViewerModule['default'] : pdfjsViewerModule) as PdfJsViewer;
+export * from "pdfjs-dist";

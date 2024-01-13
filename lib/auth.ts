@@ -6,6 +6,7 @@ import EmailProvider from "next-auth/providers/email";
 import prisma from "@/lib/prisma";
 import { checkSignIn, signInAllowed } from "./controllers/usersController";
 import { Role } from "@/types.d";
+import { Adapter } from "next-auth/adapters";
 
 
 // NextAuth options
@@ -66,7 +67,7 @@ const providers = [
 ]
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  adapter: PrismaAdapter(prisma) as Adapter,
   providers,
   session: {
     strategy: "jwt"

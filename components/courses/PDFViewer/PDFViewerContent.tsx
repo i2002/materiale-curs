@@ -33,7 +33,6 @@ export default function PDFViewerContent2({ resUrl }: Props) {
   useEffect(() => setCurrentPage(currentPage), [currentPage, setCurrentPage]);
   useEffect(() => setScale(scale), [scale, setScale]);
 
-  console.log("render");
   return (
     <div ref={pdfContainerRef} className="absolute h-full w-full overflow-auto">
       <div id="viewer" className="pdfViewer"></div>
